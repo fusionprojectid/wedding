@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Undangan Pernikahan Hanim & Firman</title>
+<style>
+  /* Reset & base */
+  body, html {
+    margin: 0; padding: 0;
+    font-family: 'Times New Roman', serif;
+    background: #fff;
+    color: #333;
+  }
+  a {color: #c19a6b; text-decoration: none;}
+  a:hover {text-decoration: underline;}
+  h1,h2,h3 {margin: 0 0 .5em;}
+  p {margin: 0 0 1em;}
+  
+  /* Welcome Screen */
+  #welcome-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e') center/cover no-repeat;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    color: white; text-align: center;
+    z-index: 9999;
+  }
+  #welcome-overlay {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1;
+  }
+  #welcome-content {
+    position: relative; z-index: 2;
+    padding: 20px;
+  }
+  #welcome-content h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+  }
+  #welcome-content p {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+  #welcome-content button {
+    background: #c19a6b;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  #welcome-content button:hover {
+    background: #a17c4e;
+  }
+  
+  /* Main content */
+  #main-content {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  section {
+    margin-bottom: 3em;
+  }
+  
+  /* Pasangan */
+  #couple {
+    text-align: center;
+  }
+  #couple img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid #c19a6b;
+    margin: 0 20px;
+  }
+  #couple-names {
+    font-family: 'Georgia', serif;
+    font-size: 2rem;
+    margin-top: 1em;
+  }
+  #couple-parents {
+    font-style: italic;
+    color: #666;
+  }
+
+  /* Acara */
+  #event {
+    background: #f9f7f1;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  #event h2 {
+    color: #c19a6b;
+    margin-bottom: 1em;
+  }
+  #event .datetime {
+    font-weight: bold;
+    margin-bottom: 1em;
+  }
+  #event iframe {
+    width: 100%;
+    height: 250px;
+    border: none;
+    border-radius: 10px;
+  }
+
+  /* Galeri */
+  #gallery {
+    text-align: center;
+  }
+  #gallery h2 {
+    color: #c19a6b;
+    margin-bottom: 1em;
+  }
+  #gallery img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin: 10px;
+    border-radius: 10px;
+    border: 3px solid #c19a6b;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  #gallery img:hover {
+    transform: scale(1.1);
+  }
+
+  /* Musik control */
+  #music-control {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    z-index: 999;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    #couple img {
+      width: 130px; height: 130px;
+      margin: 0 10px;
+    }
+    #welcome-content h1 {
+      font-size: 2rem;
+    }
+    #welcome-content p {
+      font-size: 1rem;
+    }
+    #welcome-content button {
+      padding: 10px 25px;
+      font-size: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Welcome Screen -->
+<div id="welcome-screen">
+  <div id="welcome-overlay"></div>
+  <div id="welcome-content">
+    <p>Kepada Yth. <span id="guest-name">Tamu Undangan</span></p>
+    <h1>Hanim & Firman</h1>
+    <button id="open-btn">Buka Undangan</button>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div id="main-content">
+
+  <!-- Pasangan -->
+  <section id="couple">
+    <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91" alt="Hanim" />
+    <img src="https://images.unsplash.com/photo-1517423440428-a5a00ad493e8" alt="Firman" />
+    <div id="couple-names">Hanim & Firman</div>
+    <div id="couple-parents">Putri dari Bapak Ahmad & Ibu Siti<br>dan Putra dari Bapak Budi & Ibu Rina</div>
+  </section>
+
+  <!-- Acara -->
+  <section id="event">
+    <h2>Acara Pernikahan</h2>
+    <p class="datetime">Sabtu, 26 Oktober 2025<br> Pukul 10.00 WIB - Selesai</p>
+    <p>Tempat: Gedung Serbaguna LokaLaku, Jalan Mawar No. 15, Bandung</p>
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126915.04842761742!2d107.5618092578358!3d-6.903947822945393!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e66e2619dc71%3A0x5027a76e3521ec20!2sBandung%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1691828030000!5m2!1sen!2sid" 
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </section>
+
+  <!-- Galeri -->
+  <section id="gallery">
+    <h2>Galeri Foto</h2>
+    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1" alt="Foto 1" />
+    <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde" alt="Foto 2" />
+    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330" alt="Foto 3" />
+    <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15" alt="Foto 4" />
+  </section>
+
+</div>
+
+<!-- Musik dan Kontrol -->
+<button id="music-control" aria-label="Kontrol Musik">⏸</button>
+<audio id="bg-music" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_bebd139b3f.mp3?filename=romantic-piano-112191.mp3" type="audio/mpeg" />
+</audio>
+
+<script>
+  const welcomeScreen = document.getElementById('welcome-screen');
+  const mainContent = document.getElementById('main-content');
+  const openBtn = document.getElementById('open-btn');
+  const guestName = document.getElementById('guest-name');
+  const bgMusic = document.getElementById('bg-music');
+  const musicControl = document.getElementById('music-control');
+
+  // Ambil nama tamu dari URL ?to=
+  const urlParams = new URLSearchParams(window.location.search);
+  const toName = urlParams.get('to');
+  if (toName) guestName.textContent = decodeURIComponent(toName);
+
+  openBtn.addEventListener('click', () => {
+    welcomeScreen.style.opacity = '0';
+    setTimeout(() => {
+      welcomeScreen.style.display = 'none';
+      mainContent.style.opacity = '1';
+    }, 1000);
+    bgMusic.play();
+  });
+
+  musicControl.addEventListener('click', () => {
+    if (bgMusic.paused) {
+      bgMusic.play();
+      musicControl.textContent = '⏸';
+    } else {
+      bgMusic.pause();
+      musicControl.textContent = '▶️';
+    }
+  });
+</script>
+
+</body>
+</html>
