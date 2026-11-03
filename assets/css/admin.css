@@ -29,7 +29,7 @@ body {
 }
 
 .dashboard-container {
-  max-width: 1000px;
+  max-width: 1140px;
   margin: 0 auto;
   padding: 30px 20px 80px;
 }
@@ -125,37 +125,59 @@ body {
 /* Tabs */
 .tabs-nav {
   display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  scrollbar-width: none;
-}
-.tabs-nav::-webkit-scrollbar {
-  display: none;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 28px;
+  background: #f1f3f5;
+  padding: 8px;
+  border-radius: calc(var(--admin-radius) + 4px);
+  border: 1px solid var(--admin-border);
 }
 
 .tab-btn {
   background: var(--admin-card);
   border: 1px solid var(--admin-border);
   color: var(--admin-text-muted);
-  padding: 12px 20px;
+  padding: 10px 18px;
   border-radius: var(--admin-radius);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   white-space: nowrap;
   transition: all 0.2s ease;
+  flex: 1 1 auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.tab-btn.active, .tab-btn:hover {
+.tab-btn:hover {
+  background: #ffffff;
+  color: var(--admin-text);
+  border-color: #ced4da;
+  transform: translateY(-1px);
+}
+
+.tab-btn.active {
   background: #ffffff;
   border-color: var(--admin-primary);
-  color: var(--admin-primary-dark);
-  box-shadow: 0 2px 8px rgba(182, 139, 64, 0.15);
+  color: var(--admin-primary);
+  box-shadow: 0 3px 10px rgba(182, 139, 64, 0.2);
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .tabs-nav {
+    gap: 8px;
+    padding: 6px;
+  }
+  .tab-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    flex: 1 1 calc(50% - 8px);
+  }
 }
 
 /* Card Sections */
