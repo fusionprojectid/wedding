@@ -1,4 +1,4 @@
-# 💍 Undangan Pernikahan Digital Modern (Hanim & Firman)
+# 💍 Undangan Pernikahan Digital Modern
 
 Website undangan pernikahan digital interaktif, elegan, dan *mobile-first* yang dirancang dengan memisahkan struktur HTML, CSS, dan JavaScript secara modular dan teratur.
 
