@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Kelola Undangan - fusionproject.id</title>
+  
+  <!-- Proteksi Akses: Harus Login Terlebih Dahulu -->
+  <script>
+    const LOGIN_STATUS_KEY = 'fusion_admin_logged_in';
+    if (sessionStorage.getItem(LOGIN_STATUS_KEY) !== 'true' && localStorage.getItem(LOGIN_STATUS_KEY) !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Admin Stylesheet -->
+  <link rel="stylesheet" href="assets/css/admin.css" />
+</head>
+<body>
+
+  <div class="dashboard-container">
+    
+    <!-- Top Header -->
+    <header class="dashboard-header">
+      <div class="header-title">
+        <h1><i class="fas fa-ring" style="color: var(--admin-primary);"></i> Dashboard Undangan Pernikahan</h1>
+        <p>Kelola pilihan template desain, data mempelai, jadwal acara, hingga nomor rekening.</p>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" target="_blank" class="btn btn-secondary">
+          <i class="fas fa-external-link-alt"></i> Pratinjau Undangan
+        </a>
+        <button type="button" id="btn-export-json" class="btn btn-secondary" title="Download backup konfigurasi JSON">
+          <i class="fas fa-download"></i> Ekspor Data
+        </button>
+        <label for="file-import-json" class="btn btn-secondary" style="margin: 0; cursor: pointer;">
+          <i class="fas fa-upload"></i> Impor Data
+          <input type="file" id="file-import-json" accept=".json" style="display: none;" />
+        </label>
+        <button type="button" id="btn-reset-default" class="btn btn-secondary" title="Kembalikan data ke awal">
+          <i class="fas fa-undo"></i> Reset
+        </button>
+        <button type="button" id="btn-logout" class="btn btn-danger" title="Keluar dari akun">
+          <i class="fas fa-sign-out-alt"></i> Keluar
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs-nav">
+      <button class="tab-btn active" data-tab="tab-templates">
+        <i class="fas fa-palette"></i> Pilihan Template Desain
+      </button>
+      <button class="tab-btn" data-tab="tab-couple">
+        <i class="fas fa-user-friends"></i> Data Pasangan Mempelai
+      </button>
+      <button class="tab-btn" data-tab="tab-event">
+        <i class="fas fa-calendar-check"></i> Waktu &amp; Lokasi Acara
+      </button>
+      <button class="tab-btn" data-tab="tab-gift">
+        <i class="fas fa-wallet"></i> Rekening Bank &amp; Kado
+      </button>
+      <button class="tab-btn" data-tab="tab-media">
+        <i class="fas fa-music"></i> Musik Latar
+      </button>
+      <button class="tab-btn" data-tab="tab-generator">
+        <i class="fab fa-whatsapp"></i> Buat Tautan Tamu
+      </button>
+      <button class="tab-btn" data-tab="tab-account">
+        <i class="fas fa-user-shield"></i> Pengaturan Login
+      </button>
+    </nav>
+
+    <!-- Form Container -->
+    <form id="wedding-form">
+      <input type="hidden" id="selected-theme" value="template-1" />
+
+      <!-- ===================================================================
+           TAB 1: PILIHAN TEMPLATE DESAIN
+           =================================================================== -->
+      <div id="tab-templates" class="tab-content active">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-magic" style="color: var(--admin-primary);"></i> Koleksi Tema &amp; Template Desain</h3>
+            <p>Pilih gaya desain yang paling sesuai dengan konsep pernikahan Anda. Semua template terhubung otomatis dengan data Anda.</p>
+          </div>
+
+          <div class="template-grid">
+            
+            <!-- Template 1: Royal Champagne & Gold -->
+            <div class="template-card" id="card-template-1">
+              <div class="template-banner" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=700&q=80');">
+                <div class="template-banner-overlay"></div>
+                <span class="template-badge-status" id="badge-template-1">Aktif Digunakan</span>
+                <div class="template-banner-content">
+                  <h4>Template 1: Royal Champagne</h4>
+                  <p>Kemewahan nuansa emas, gading, dan editorial modern</p>
+                </div>
+              </div>
+              <div class="template-body">
+                <div>
+                  <div class="template-swatches">
+                    <span style="font-size: 0.78rem; font-weight: 600; color: #495057;">Palet Warna:</span>
+                    <div class="swatch-dot" style="background: #b68b40;" title="Gold Accent"></div>
+                    <div class="swatch-dot" style="background: #f5edd8;" title="Champagne Light"></div>
+                    <div class="swatch-dot" style="background: #586b62;" title="Botanical Subtle"></div>
+                    <div class="swatch-dot" style="background: #2d2926;" title="Charcoal Dark"></div>
+                  </div>
+                  <p style="font-size: 0.83rem; color: #6c757d; line-height: 1.5; margin-bottom: 18px;">
+                    Desain klasik mewah (*quiet luxury*) dengan aksen emas linear, transisi piringan hitam, kelopak mawar jatuh, serta tipografi serif editorial bergaya majalah pernikahan.
+                  </p>
+                </div>
+                <div class="template-actions">
+                  <a href="index.html?template=1" target="_blank" class="btn btn-secondary">
+                    <i class="fas fa-eye"></i> Pratinjau
+                  </a>
+                  <button type="button" class="btn btn-primary btn-apply-template" data-theme="template-1">
+                    <i class="fas fa-check"></i> Gunakan Template Ini
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 2: Modern Arch Minimalist -->
+            <div class="template-card" id="card-template-2">
+              <div class="template-banner" style="background-image: url('https://images.unsplash.com/photo-1519225438550-4277b0129706?auto=format&fit=crop&w=700&q=80');">
+                <div class="template-banner-overlay"></div>
+                <span class="template-badge-status" id="badge-template-2">Pilih Template</span>
+                <div class="template-banner-content">
+                  <h4>Template 2: Modern Arch Minimalist</h4>
+                  <p>Arsitektur lengkung (Arch), Terracotta &amp; Sand Japandi</p>
+                </div>
+              </div>
+              <div class="template-body">
+                <div>
+                  <div class="template-swatches">
+                    <span style="font-size: 0.78rem; font-weight: 600; color: #495057;">Palet &amp; Struktur:</span>
+                    <div class="swatch-dot" style="background: #b86246;" title="Warm Terracotta"></div>
+                    <div class="swatch-dot" style="background: #f8f5f0;" title="Sand Oat"></div>
+                    <div class="swatch-dot" style="background: #7a756f;" title="Muted Stone"></div>
+                    <div class="swatch-dot" style="background: #221f1d;" title="Espresso"></div>
+                  </div>
+                  <p style="font-size: 0.83rem; color: #6c757d; line-height: 1.5; margin-bottom: 18px;">
+                    <strong>Bentuk Tata Letak Khusus:</strong> Foto mempelai dalam <em>bingkai lengkung arsitektur tinggi (Arch Frame)</em>, tipografi <em>Cinzel &amp; Syne</em> bergaya arsitektural modern, kartu monolitik minimalis, dan debu terracotta hangat.
+                  </p>
+                </div>
+                <div class="template-actions">
+                  <a href="index.html?template=2" target="_blank" class="btn btn-secondary">
+                    <i class="fas fa-eye"></i> Pratinjau
+                  </a>
+                  <button type="button" class="btn btn-primary btn-apply-template" data-theme="template-2">
+                    <i class="fas fa-check"></i> Gunakan Template Ini
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 3: Nusantara Heritage Keraton -->
+            <div class="template-card" id="card-template-3">
+              <div class="template-banner" style="background-image: url('https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=700&q=80'); filter: sepia(0.3) brightness(0.85);">
+                <div class="template-banner-overlay"></div>
+                <span class="template-badge-status" id="badge-template-3">Pilih Template</span>
+                <div class="template-banner-content">
+                  <h4>Template 3: Nusantara Heritage</h4>
+                  <p>Adat Jawa Keraton, Gunungan Wayang &amp; Emas Antik</p>
+                </div>
+              </div>
+              <div class="template-body">
+                <div>
+                  <div class="template-swatches">
+                    <span style="font-size: 0.78rem; font-weight: 600; color: #495057;">Palet &amp; Struktur:</span>
+                    <div class="swatch-dot" style="background: #c59b27;" title="Imperial Antique Gold"></div>
+                    <div class="swatch-dot" style="background: #6e2c1c;" title="Marun Sogan"></div>
+                    <div class="swatch-dot" style="background: #f5eedf;" title="Vintage Parchment"></div>
+                    <div class="swatch-dot" style="background: #24120c;" title="Keraton Brown"></div>
+                  </div>
+                  <p style="font-size: 0.83rem; color: #6c757d; line-height: 1.5; margin-bottom: 18px;">
+                    <strong>Bentuk Tata Letak Khusus:</strong> Jambul lambang <em>Gunungan Wayang</em> aristokrat, bingkai ukiran gebyok klasik, tekstur kertas piagam <em>Layang Pawiwahan</em>, serta taburan kelopak bunga melati dan serpihan emas keraton.
+                  </p>
+                </div>
+                <div class="template-actions">
+                  <a href="index.html?template=3" target="_blank" class="btn btn-secondary">
+                    <i class="fas fa-eye"></i> Pratinjau
+                  </a>
+                  <button type="button" class="btn btn-primary btn-apply-template" data-theme="template-3">
+                    <i class="fas fa-check"></i> Gunakan Template Ini
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 4: Botanical Greenhouse & Wildflower -->
+            <div class="template-card" id="card-template-4">
+              <div class="template-banner" style="background-image: url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=700&q=80');">
+                <div class="template-banner-overlay"></div>
+                <span class="template-badge-status" id="badge-template-4">Pilih Template</span>
+                <div class="template-banner-content">
+                  <h4>Template 4: Botanical Greenhouse</h4>
+                  <p>Dedaunan liar asimetris, Olive Sage &amp; Rustic Flora</p>
+                </div>
+              </div>
+              <div class="template-body">
+                <div>
+                  <div class="template-swatches">
+                    <span style="font-size: 0.78rem; font-weight: 600; color: #495057;">Palet &amp; Struktur:</span>
+                    <div class="swatch-dot" style="background: #3d6350;" title="Olive Sage Green"></div>
+                    <div class="swatch-dot" style="background: #f5f8f5;" title="Greenhouse Cream"></div>
+                    <div class="swatch-dot" style="background: #8c7e6d;" title="Warm Kraft Wood"></div>
+                    <div class="swatch-dot" style="background: #1c2e25;" title="Forest Dark"></div>
+                  </div>
+                  <p style="font-size: 0.83rem; color: #6c757d; line-height: 1.5; margin-bottom: 18px;">
+                    <strong>Bentuk Tata Letak Khusus:</strong> Bingkai foto <em>oval asimetris menyerupai kelopak daun</em>, kartu bersudut lengkung dedaunan organik, tipografi kursif miring <em>Cormorant Garamond</em>, serta dedaunan eucalyptus yang berjatuhan.
+                  </p>
+                </div>
+                <div class="template-actions">
+                  <a href="index.html?template=4" target="_blank" class="btn btn-secondary">
+                    <i class="fas fa-eye"></i> Pratinjau
+                  </a>
+                  <button type="button" class="btn btn-primary btn-apply-template" data-theme="template-4">
+                    <i class="fas fa-check"></i> Gunakan Template Ini
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 5: The Wedding Chronicle Newspaper -->
+            <div class="template-card" id="card-template-5">
+              <div class="template-banner" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=700&q=80'); filter: sepia(0.6) contrast(1.1) brightness(0.6);">
+                <div class="template-banner-overlay"></div>
+                <span class="template-badge-status" id="badge-template-5">Pilih Template</span>
+                <div class="template-banner-content">
+                  <h4>Template 5: The Wedding Chronicle</h4>
+                  <p>Retro Vintage Newspaper &amp; Polaroid Film Frame</p>
+                </div>
+              </div>
+              <div class="template-body">
+                <div>
+                  <div class="template-swatches">
+                    <span style="font-size: 0.78rem; font-weight: 600; color: #495057;">Palet &amp; Struktur:</span>
+                    <div class="swatch-dot" style="background: #8b3a2b;" title="Press Stamp Red"></div>
+                    <div class="swatch-dot" style="background: #fbf7ee;" title="Newsprint Paper"></div>
+                    <div class="swatch-dot" style="background: #2c2825;" title="Printer Ink"></div>
+                    <div class="swatch-dot" style="background: #efe7d5;" title="Sepia Cream"></div>
+                  </div>
+                  <p style="font-size: 0.83rem; color: #6c757d; line-height: 1.5; margin-bottom: 18px;">
+                    <strong>Bentuk Tata Letak Khusus:</strong> Bingkai foto <em>Polaroid Film Frame jadul</em> bergaris ganda cetak koran, kepala tajuk surat kabar klasik, tipografi mesin tik <em>Courier Prime</em>, dan partikel debu daun gugur antik.
+                  </p>
+                </div>
+                <div class="template-actions">
+                  <a href="index.html?template=5" target="_blank" class="btn btn-secondary">
+                    <i class="fas fa-eye"></i> Pratinjau
+                  </a>
+                  <button type="button" class="btn btn-primary btn-apply-template" data-theme="template-5">
+                    <i class="fas fa-check"></i> Gunakan Template Ini
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 6: Midnight Celestial Starlight -->
+            <div class="template-card" id="card-template-6">
+              <div class="template-banner" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=700&q=80'); filter: hue-rotate(190deg) brightness(0.45);">
+                <div class="template-banner-overlay"></div>
+                <span class="template-badge-status" id="badge-template-6">Pilih Template</span>
+                <div class="template-banner-content">
+                  <h4>Template 6: Midnight Celestial Starlight</h4>
+                  <p>Cosmic Void, Diamond Octagon &amp; Pendaran Perak</p>
+                </div>
+              </div>
+              <div class="template-body">
+                <div>
+                  <div class="template-swatches">
+                    <span style="font-size: 0.78rem; font-weight: 600; color: #495057;">Palet &amp; Struktur:</span>
+                    <div class="swatch-dot" style="background: #38bdf8;" title="Starlight Cyan"></div>
+                    <div class="swatch-dot" style="background: #090d16;" title="Cosmic Void"></div>
+                    <div class="swatch-dot" style="background: #bae6fd;" title="Silver Stardust"></div>
+                    <div class="swatch-dot" style="background: #1e293b;" title="Night Slate"></div>
+                  </div>
+                  <p style="font-size: 0.83rem; color: #6c757d; line-height: 1.5; margin-bottom: 18px;">
+                    <strong>Bentuk Tata Letak Khusus:</strong> Bingkai foto <em>Diamond Octagonal Bevel bersegi delapan</em> dengan pendaran neon starlight, kartu kaca gelap kosmik, serta animasi bintang berkilau dan percikan perak melayang.
+                  </p>
+                </div>
+                <div class="template-actions">
+                  <a href="index.html?template=6" target="_blank" class="btn btn-secondary">
+                    <i class="fas fa-eye"></i> Pratinjau
+                  </a>
+                  <button type="button" class="btn btn-primary btn-apply-template" data-theme="template-6">
+                    <i class="fas fa-check"></i> Gunakan Template Ini
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 7: Islamic Emerald Arabesque -->
+            <div class="template-card" id="card-template-7">
+              <div class="template-banner" style="background-image: url('https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=700&q=80'); filter: hue-rotate(60deg) brightness(0.5);">
+                <div class="template-banner-overlay"></div>
+                <span class="template-badge-status" id="badge-template-7">Pilih Template</span>
+                <div class="template-banner-content">
+                  <h4>Template 7: Islamic Emerald Arabesque</h4>
+                  <p>Kubah Lengkung Mesjid, Zamrud Hijau &amp; Emas Maroko</p>
+                </div>
+              </div>
+              <div class="template-body">
+                <div>
+                  <div class="template-swatches">
+                    <span style="font-size: 0.78rem; font-weight: 600; color: #495057;">Palet &amp; Struktur:</span>
+                    <div class="swatch-dot" style="background: #dfb76c;" title="Moroccan Gold"></div>
+                    <div class="swatch-dot" style="background: #0e382b;" title="Royal Emerald"></div>
+                    <div class="swatch-dot" style="background: #f4f8f5;" title="Emerald Ivory"></div>
+                    <div class="swatch-dot" style="background: #081d16;" title="Deep Velvet"></div>
+                  </div>
+                  <p style="font-size: 0.83rem; color: #6c757d; line-height: 1.5; margin-bottom: 18px;">
+                    <strong>Bentuk Tata Letak Khusus:</strong> Bingkai foto dan kartu bergaya <em>Kubah Lengkung Mesjid (Islamic Dome Arch)</em>, ornamen arabesque Timur Tengah emas, tipografi sakral <em>Marcellus &amp; Amiri</em>, serta taburan bunga melati.
+                  </p>
+                </div>
+                <div class="template-actions">
+                  <a href="index.html?template=7" target="_blank" class="btn btn-secondary">
+                    <i class="fas fa-eye"></i> Pratinjau
+                  </a>
+                  <button type="button" class="btn btn-primary btn-apply-template" data-theme="template-7">
+                    <i class="fas fa-check"></i> Gunakan Template Ini
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 8: Korean Pastel Coquette -->
+            <div class="template-card" id="card-template-8">
+              <div class="template-banner" style="background-image: url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=700&q=80'); filter: brightness(0.7) contrast(1.1);">
+                <div class="template-banner-overlay"></div>
+                <span class="template-badge-status" id="badge-template-8">Pilih Template</span>
+                <div class="template-banner-content">
+                  <h4>Template 8: Korean Pastel Coquette</h4>
+                  <p>Aesthetic K-Drama, Soft Cloud Squircle &amp; Pastel Pink</p>
+                </div>
+              </div>
+              <div class="template-body">
+                <div>
+                  <div class="template-swatches">
+                    <span style="font-size: 0.78rem; font-weight: 600; color: #495057;">Palet &amp; Struktur:</span>
+                    <div class="swatch-dot" style="background: #f07b95;" title="Sweet Pastel Pink"></div>
+                    <div class="swatch-dot" style="background: #7fa6c8;" title="Baby Sky Blue"></div>
+                    <div class="swatch-dot" style="background: #fdf5f6;" title="Cotton Candy"></div>
+                    <div class="swatch-dot" style="background: #ffffff;" title="Pure White"></div>
+                  </div>
+                  <p style="font-size: 0.83rem; color: #6c757d; line-height: 1.5; margin-bottom: 18px;">
+                    <strong>Bentuk Tata Letak Khusus:</strong> Bingkai foto <em>Soft Cloud Squircle membulat empuk</em> layaknya awan manis, kartu ultra-plush bernuansa drama Korea romantis, warna pastel strawberry, serta partikel sakura merah muda.
+                  </p>
+                </div>
+                <div class="template-actions">
+                  <a href="index.html?template=8" target="_blank" class="btn btn-secondary">
+                    <i class="fas fa-eye"></i> Pratinjau
+                  </a>
+                  <button type="button" class="btn btn-primary btn-apply-template" data-theme="template-8">
+                    <i class="fas fa-check"></i> Gunakan Template Ini
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           TAB 2: MEMPELAI (GROOM & BRIDE)
+           =================================================================== -->
+      <div id="tab-couple" class="tab-content">
+        
+        <!-- Mempelai Pria -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-male" style="color: #3b82f6;"></i> Calon Mempelai Pria (Groom)</h3>
+            <p>Masukkan profil lengkap pengantin pria</p>
+          </div>
+          
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="groom-nickname" class="form-label">Nama Panggilan / Sapaan:</label>
+              <input type="text" id="groom-nickname" class="form-input" placeholder="Contoh: Firman" required />
+            </div>
+            <div class="form-group">
+              <label for="groom-fullname" class="form-label">Nama Lengkap &amp; Gelar:</label>
+              <input type="text" id="groom-fullname" class="form-input" placeholder="Contoh: Firman Pratama, S.Kom" required />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="groom-child-order" class="form-label">Keterangan Urutan Anak:</label>
+              <input type="text" id="groom-child-order" class="form-input" placeholder="Contoh: Putra Pertama dari" />
+            </div>
+            <div class="form-group">
+              <label for="groom-origin" class="form-label">Kota Asal:</label>
+              <input type="text" id="groom-origin" class="form-input" placeholder="Contoh: Bandung, Jawa Barat" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="groom-father" class="form-label">Nama Ayah:</label>
+              <input type="text" id="groom-father" class="form-input" placeholder="Contoh: Bapak Budi Santoso" />
+            </div>
+            <div class="form-group">
+              <label for="groom-mother" class="form-label">Nama Ibu:</label>
+              <input type="text" id="groom-mother" class="form-input" placeholder="Contoh: Ibu Rina Marlina" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="groom-instagram" class="form-label">Username Instagram <small>(tanpa @)</small>:</label>
+              <input type="text" id="groom-instagram" class="form-input" placeholder="Contoh: firmanpratama" />
+            </div>
+            <div class="form-group">
+              <label for="groom-photo" class="form-label">URL Foto Profil:</label>
+              <input type="text" id="groom-photo" class="form-input" placeholder="URL foto online atau assets/images/groom.jpg" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Mempelai Wanita -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-female" style="color: #ec4899;"></i> Calon Mempelai Wanita (Bride)</h3>
+            <p>Masukkan profil lengkap pengantin wanita</p>
+          </div>
+          
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="bride-nickname" class="form-label">Nama Panggilan / Sapaan:</label>
+              <input type="text" id="bride-nickname" class="form-input" placeholder="Contoh: Hanim" required />
+            </div>
+            <div class="form-group">
+              <label for="bride-fullname" class="form-label">Nama Lengkap &amp; Gelar:</label>
+              <input type="text" id="bride-fullname" class="form-input" placeholder="Contoh: Hanim Lathifah, S.Ds" required />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="bride-child-order" class="form-label">Keterangan Urutan Anak:</label>
+              <input type="text" id="bride-child-order" class="form-input" placeholder="Contoh: Putri Kedua dari" />
+            </div>
+            <div class="form-group">
+              <label for="bride-origin" class="form-label">Kota Asal:</label>
+              <input type="text" id="bride-origin" class="form-input" placeholder="Contoh: Bandung, Jawa Barat" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="bride-father" class="form-label">Nama Ayah:</label>
+              <input type="text" id="bride-father" class="form-input" placeholder="Contoh: Bapak Ahmad Hidayat" />
+            </div>
+            <div class="form-group">
+              <label for="bride-mother" class="form-label">Nama Ibu:</label>
+              <input type="text" id="bride-mother" class="form-input" placeholder="Contoh: Ibu Siti Aminah" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="bride-instagram" class="form-label">Username Instagram <small>(tanpa @)</small>:</label>
+              <input type="text" id="bride-instagram" class="form-input" placeholder="Contoh: hanimlathifah" />
+            </div>
+            <div class="form-group">
+              <label for="bride-photo" class="form-label">URL Foto Profil:</label>
+              <input type="text" id="bride-photo" class="form-input" placeholder="URL foto online atau assets/images/bride.jpg" />
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===================================================================
+           TAB 3: WAKTU & LOKASI ACARA
+           =================================================================== -->
+      <div id="tab-event" class="tab-content">
+        
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="far fa-clock" style="color: var(--admin-primary);"></i> Waktu Hari-H &amp; Hitung Mundur</h3>
+            <p>Atur tanggal pernikahan untuk penghitung waktu mundur otomatis</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="event-date-iso" class="form-label">Target Tanggal &amp; Waktu Akad (Untuk Countdown Timer):</label>
+              <input type="datetime-local" id="event-date-iso" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label for="event-date-formatted" class="form-label">Teks Format Tanggal (Ditampilkan di Website):</label>
+              <input type="text" id="event-date-formatted" class="form-input" placeholder="Contoh: Sabtu, 26 Oktober 2026" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-ring" style="color: var(--admin-primary);"></i> Detail Akad Nikah</h3>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="event-akad-time" class="form-label">Waktu Akad:</label>
+              <input type="text" id="event-akad-time" class="form-input" placeholder="Contoh: Pukul 08.00 - 10.00 WIB" />
+            </div>
+            <div class="form-group">
+              <label for="event-akad-venue" class="form-label">Nama Tempat / Gedung Akad:</label>
+              <input type="text" id="event-akad-venue" class="form-input" placeholder="Contoh: Gedung Serbaguna LokaLaku" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="event-akad-address" class="form-label">Alamat Lengkap Akad:</label>
+            <input type="text" id="event-akad-address" class="form-input" placeholder="Contoh: Jalan Mawar No. 15, Sukajadi, Kota Bandung" />
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-glass-cheers" style="color: var(--admin-primary);"></i> Detail Resepsi Pernikahan</h3>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="event-resepsi-time" class="form-label">Waktu Resepsi:</label>
+              <input type="text" id="event-resepsi-time" class="form-input" placeholder="Contoh: Pukul 11.00 - 14.00 WIB" />
+            </div>
+            <div class="form-group">
+              <label for="event-resepsi-venue" class="form-label">Nama Tempat / Ballroom Resepsi:</label>
+              <input type="text" id="event-resepsi-venue" class="form-input" placeholder="Contoh: Gedung Serbaguna LokaLaku - Grand Ballroom" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="event-resepsi-address" class="form-label">Alamat Lengkap Resepsi:</label>
+            <input type="text" id="event-resepsi-address" class="form-input" placeholder="Contoh: Jalan Mawar No. 15, Sukajadi, Kota Bandung" />
+          </div>
+
+          <div class="form-group">
+            <label for="event-maps-iframe" class="form-label">URL Embed Google Maps (iframe src):</label>
+            <input type="text" id="event-maps-iframe" class="form-input" placeholder="Contoh: https://www.google.com/maps/embed?pb=..." />
+          </div>
+          <div class="form-group">
+            <label for="event-maps-url" class="form-label">Link Langsung Google Maps (Untuk Tombol Petunjuk Arah):</label>
+            <input type="text" id="event-maps-url" class="form-input" placeholder="Contoh: https://maps.google.com/?q=Lokasi" />
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===================================================================
+           TAB 4: REKENING & KADO
+           =================================================================== -->
+      <div id="tab-gift" class="tab-content">
+        
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-credit-card" style="color: var(--admin-primary);"></i> Rekening Bank 1</h3>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="bank1-name" class="form-label">Nama Bank / E-Wallet:</label>
+              <input type="text" id="bank1-name" class="form-input" placeholder="Contoh: BCA / DANA" />
+            </div>
+            <div class="form-group">
+              <label for="bank1-number" class="form-label">Nomor Rekening:</label>
+              <input type="text" id="bank1-number" class="form-input" placeholder="Contoh: 1234567890" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bank1-holder" class="form-label">Atas Nama Pemilik:</label>
+            <input type="text" id="bank1-holder" class="form-input" placeholder="Contoh: Firman Pratama" />
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-credit-card" style="color: var(--admin-primary);"></i> Rekening Bank 2</h3>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="bank2-name" class="form-label">Nama Bank / E-Wallet:</label>
+              <input type="text" id="bank2-name" class="form-input" placeholder="Contoh: MANDIRI / BSI / BRI" />
+            </div>
+            <div class="form-group">
+              <label for="bank2-number" class="form-label">Nomor Rekening:</label>
+              <input type="text" id="bank2-number" class="form-input" placeholder="Contoh: 9876543210" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bank2-holder" class="form-label">Atas Nama Pemilik:</label>
+            <input type="text" id="bank2-holder" class="form-input" placeholder="Contoh: Hanim Lathifah" />
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-shipping-fast" style="color: var(--admin-primary);"></i> Alamat Pengiriman Kado Fisik</h3>
+            <p>Alamat tujuan jika ada tamu yang mengirim bingkisan/kado secara fisik</p>
+          </div>
+          <div class="form-group">
+            <label for="gift-physical-address" class="form-label">Alamat Lengkap &amp; Nomor Penerima:</label>
+            <textarea id="gift-physical-address" class="form-textarea" placeholder="Contoh: Jl. Mawar No. 15 RT 02/RW 04, Sukajadi, Kota Bandung - Penerima: Firman & Hanim (0812-3456-7890)"></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===================================================================
+           TAB 5: MUSIK LATAR
+           =================================================================== -->
+      <div id="tab-media" class="tab-content">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-volume-up" style="color: var(--admin-primary);"></i> Pengaturan Musik Latar</h3>
+            <p>Pilih lagu bernuansa romantis untuk menemani tamu saat membuka undangan</p>
+          </div>
+          <div class="form-group">
+            <label for="audio-url" class="form-label">URL File Musik MP3:</label>
+            <input type="text" id="audio-url" class="form-input" placeholder="Contoh: https://domain.com/musik.mp3 atau assets/music.mp3" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           TAB 6: GENERATOR TAUTAN TAMU
+           =================================================================== -->
+      <div id="tab-generator" class="tab-content">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fab fa-whatsapp" style="color: #25d366;"></i> Generator Tautan Undangan Khusus Tamu</h3>
+            <p>Ketikkan nama tamu undangan untuk langsung menghasilkan tautan khusus dan kirim via WhatsApp</p>
+          </div>
+          
+          <div class="form-group">
+            <label for="admin-guest-name" class="form-label">Nama Tamu Undangan:</label>
+            <input type="text" id="admin-guest-name" class="form-input" placeholder="Contoh: Bapak Rudi Hartono &amp; Istri" />
+          </div>
+
+          <div id="admin-gen-result" style="display: none; margin-top: 20px;">
+            <div class="form-group">
+              <label class="form-label">Tautan Undangan Khusus:</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="admin-guest-link" readonly class="form-input" style="background: #f8f9fa;" />
+                <button type="button" id="btn-admin-copy-link" class="btn btn-secondary" style="white-space: nowrap;">
+                  <i class="far fa-copy"></i> Salin Link
+                </button>
+              </div>
+            </div>
+
+            <div style="margin-top: 14px;">
+              <button type="button" id="btn-admin-share-wa" class="btn btn-success" style="padding: 12px 20px; font-size: 0.95rem;">
+                <i class="fab fa-whatsapp"></i> Buka &amp; Kirim Chat WhatsApp ke Tamu
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           TAB 7: PENGATURAN LOGIN (GANTI USERNAME & PASSWORD)
+           =================================================================== -->
+      <div id="tab-account" class="tab-content">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-lock" style="color: var(--admin-primary);"></i> Keamanan &amp; Ganti Password Dashboard</h3>
+            <p>Perbarui kredensial login admin agar dashboard Anda tetap aman dan terlindungi</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="account-username" class="form-label">Username Baru:</label>
+              <input type="text" id="account-username" class="form-input" placeholder="Username baru" />
+            </div>
+            <div class="form-group">
+              <label for="account-password" class="form-label">Password Baru:</label>
+              <input type="password" id="account-password" class="form-input" placeholder="Password baru" />
+            </div>
+          </div>
+
+          <button type="button" id="btn-save-credentials" class="btn btn-primary" style="margin-top: 8px;">
+            <i class="fas fa-key"></i> Simpan Username &amp; Password Baru
+          </button>
+        </div>
+      </div>
+
+      <!-- Sticky Save Bar -->
+      <div class="bottom-bar">
+        <div class="bottom-bar-inner">
+          <span style="font-size: 0.85rem; color: var(--admin-text-muted);">
+            <i class="fas fa-info-circle"></i> Perubahan disimpan langsung ke memori browser &amp; langsung tampil di undangan.
+          </span>
+          <div style="display: flex; gap: 10px;">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i> Simpan Perubahan
+            </button>
+            <a href="index.html" target="_blank" class="btn btn-success">
+              <i class="fas fa-eye"></i> Buka Hasil Undangan
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

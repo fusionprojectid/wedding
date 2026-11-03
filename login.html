@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Pengantin - fusionproject.id</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #1a1715;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(88, 107, 98, 0.12) 0%, transparent 40%),
+        url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1400&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      padding: 20px;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(18, 15, 14, 0.85);
+      backdrop-filter: blur(10px);
+    }
+
+    .login-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 420px;
+      background: rgba(28, 25, 23, 0.88);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(16px);
+      color: #f7f5f0;
+      animation: fadeIn 0.6s ease;
+    }
+
+    .login-brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-logo {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      border: 1.5px solid #d4af37;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: #d4af37;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+    }
+
+    .login-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    .login-subtitle {
+      font-size: 0.82rem;
+      color: #a8a29e;
+      margin-top: 4px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #d6d3d1;
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #78716c;
+      font-size: 0.95rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 14px 12px 42px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .form-input:focus {
+      border-color: #d4af37;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+    }
+
+    .btn-toggle-pwd {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: #78716c;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+    .btn-toggle-pwd:hover {
+      color: #d4af37;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: #a8a29e;
+      margin-bottom: 24px;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .btn-login {
+      width: 100%;
+      background: linear-gradient(135deg, #d4af37 0%, #aa771c 100%);
+      color: #1a1715;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+      transition: all 0.25s ease;
+    }
+
+    .btn-login:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      margin-bottom: 18px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      animation: shake 0.4s ease;
+    }
+
+    .demo-credentials {
+      margin-top: 24px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px dashed rgba(212, 175, 55, 0.25);
+      border-radius: 12px;
+      font-size: 0.78rem;
+      color: #a8a29e;
+      text-align: center;
+    }
+
+    .demo-credentials strong {
+      color: #f3e5ab;
+    }
+
+    .back-to-invitation {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .back-to-invitation a {
+      color: #a8a29e;
+      text-decoration: none;
+      font-size: 0.82rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+
+    .back-to-invitation a:hover {
+      color: #d4af37;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    
+    <div class="login-brand">
+      <div class="login-logo">
+        <i class="fas fa-ring"></i>
+      </div>
+      <h2 class="login-title">Dashboard Login</h2>
+      <p class="login-subtitle">Akses Kelola Undangan fusionproject.id</p>
+    </div>
+
+    <div id="login-alert" class="alert-error">
+      <i class="fas fa-exclamation-circle"></i>
+      <span id="alert-text">Username atau password salah!</span>
+    </div>
+
+    <form id="login-form">
+      
+      <div class="form-group">
+        <label for="username" class="form-label">Username:</label>
+        <div class="input-wrapper">
+          <i class="fas fa-user input-icon"></i>
+          <input type="text" id="username" class="form-input" placeholder="Masukkan username" required autofocus autocomplete="username" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password:</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" id="password" class="form-input" placeholder="Masukkan password" required autocomplete="current-password" />
+          <button type="button" id="btn-toggle-pwd" class="btn-toggle-pwd" aria-label="Lihat Password">
+            <i class="far fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-options">
+        <label class="remember-me">
+          <input type="checkbox" id="remember-me" checked />
+          <span>Ingat saya</span>
+        </label>
+      </div>
+
+      <button type="submit" class="btn-login" id="btn-submit-login">
+        <i class="fas fa-sign-in-alt"></i> Masuk ke Dashboard
+      </button>
+
+    </form>
+
+    <div class="demo-credentials">
+      <i class="fas fa-key" style="color: #d4af37;"></i> Akun Default Bawaan:<br>
+      Username: <strong>admin</strong> &bull; Password: <strong>admin123</strong>
+    </div>
+
+    <div class="back-to-invitation">
+      <a href="index.html">
+        <i class="fas fa-arrow-left"></i> Kembali ke Halaman Undangan
+      </a>
+    </div>
+
+  </div>
+
+  <script>
+    // Inisialisasi kredensial default jika belum ada
+    const AUTH_STORAGE_KEY = 'fusion_admin_credentials';
+    const LOGIN_STATUS_KEY = 'fusion_admin_logged_in';
+
+    function getStoredCredentials() {
+      try {
+        const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+        if (stored) {
+          return JSON.parse(stored);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      return { username: 'admin', password: 'admin123' };
+    }
+
+    // Toggle Password Visibility
+    const pwdInput = document.getElementById('password');
+    const btnTogglePwd = document.getElementById('btn-toggle-pwd');
+    if (btnTogglePwd && pwdInput) {
+      btnTogglePwd.addEventListener('click', () => {
+        const isPwd = pwdInput.type === 'password';
+        pwdInput.type = isPwd ? 'text' : 'password';
+        btnTogglePwd.innerHTML = isPwd ? '<i class="far fa-eye-slash"></i>' : '<i class="far fa-eye"></i>';
+      });
+    }
+
+    // Auto-redirect jika sudah login
+    if (sessionStorage.getItem(LOGIN_STATUS_KEY) === 'true' || localStorage.getItem(LOGIN_STATUS_KEY) === 'true') {
+      window.location.href = 'admin.html';
+    }
+
+    // Handle Form Submit
+    const form = document.getElementById('login-form');
+    const alertBox = document.getElementById('login-alert');
+    const alertText = document.getElementById('alert-text');
+    const userInput = document.getElementById('username');
+    const rememberMe = document.getElementById('remember-me');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const enteredUser = userInput.value.trim();
+      const enteredPass = pwdInput.value;
+      const validCreds = getStoredCredentials();
+
+      if (enteredUser === validCreds.username && enteredPass === validCreds.password) {
+        // Berhasil login
+        if (rememberMe.checked) {
+          localStorage.setItem(LOGIN_STATUS_KEY, 'true');
+        } else {
+          sessionStorage.setItem(LOGIN_STATUS_KEY, 'true');
+        }
+
+        const btnSubmit = document.getElementById('btn-submit-login');
+        btnSubmit.innerHTML = '<i class="fas fa-check-circle"></i> Berhasil Masuk...';
+        btnSubmit.style.background = '#2b8a3e';
+        btnSubmit.style.color = '#fff';
+
+        setTimeout(() => {
+          window.location.href = 'admin.html';
+        }, 500);
+      } else {
+        alertBox.style.display = 'flex';
+        alertText.textContent = 'Username atau password tidak sesuai!';
+        pwdInput.value = '';
+        pwdInput.focus();
+      }
+    });
+  </script>
+
+</body>
+</html>
+

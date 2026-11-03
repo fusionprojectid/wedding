@@ -1,6 +1,6 @@
 /**
  * MAIN INTERACTIVITY & CORE LOGIC
- * Digital Wedding Invitation - Hanim & Firman
+ * Digital Wedding Invitation - fusionproject.id
  */
 
 // Global Toast System
@@ -38,9 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
   const toParam = urlParams.get('to');
   if (toParam) {
-    const formattedName = decodeURIComponent(toParam.replace(/\+/g, ' '));
-    if (guestNameEl) guestNameEl.textContent = formattedName;
-    if (rsvpNameInput) rsvpNameInput.value = formattedName;
+    try {
+      const formattedName = decodeURIComponent(toParam.replace(/\+/g, ' '));
+      if (guestNameEl) guestNameEl.textContent = formattedName;
+      if (rsvpNameInput) rsvpNameInput.value = formattedName;
+    } catch (e) {
+      console.warn('Error decoding guest name parameter:', e);
+    }
   }
 
   // 2. Open Invitation Button
@@ -58,6 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
       // Unlock Screen
       if (welcomeScreen) {
         welcomeScreen.classList.add('opened');
+        // Hide welcome screen completely after animation finishes to prevent touch interception
+        setTimeout(() => {
+          welcomeScreen.style.display = 'none';
+        }, 900);
       }
       document.body.classList.remove('locked');
 
@@ -191,4 +199,3 @@ document.addEventListener('DOMContentLoaded', () => {
     revealElements.forEach(el => el.classList.add('revealed'));
   }
 });
-

@@ -4,7 +4,7 @@
  */
 
 (function () {
-  const STORAGE_KEY = 'wedding_wishes_hanim_firman';
+  const STORAGE_KEY = 'wedding_wishes_fusion';
 
   const defaultWishes = [
     {
@@ -12,7 +12,7 @@
       name: 'Rangga & Cinta',
       attendance: 'hadir',
       guests: '2',
-      message: 'Selamat berbahagia Hanim & Firman! Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Aamiin.',
+      message: 'Selamat berbahagia untuk kedua mempelai! Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Aamiin.',
       date: '2 jam yang lalu'
     },
     {
@@ -20,7 +20,7 @@
       name: 'Dimas Prasetyo, S.Kom',
       attendance: 'hadir',
       guests: '1',
-      message: 'Happy wedding bro Firman! Akhirnya berlabuh juga di pelaminan. Lancar sampai hari H ya kawan!',
+      message: 'Happy wedding brother! Akhirnya berlabuh juga di pelaminan yang megah. Lancar sampai hari H ya kawan!',
       date: '5 jam yang lalu'
     },
     {
@@ -28,7 +28,7 @@
       name: 'Nadia Rahmawati',
       attendance: 'hadir',
       guests: '2',
-      message: 'Barakallahu lakuma wa baraka alaikuma wa jama\'a bainakuma fii khair. Cantik banget Hanim!',
+      message: 'Barakallahu lakuma wa baraka alaikuma wa jama\'a bainakuma fii khair. Anggun dan serasi sekali!',
       date: '1 hari yang lalu'
     },
     {
@@ -36,7 +36,7 @@
       name: 'Keluarga Besar Bpk. Hendra',
       attendance: 'ragu',
       guests: '1',
-      message: 'Selamat menempuh hidup baru untuk kedua mempelai. Semoga senantiasa diberkahi kebahagiaan.',
+      message: 'Selamat menempuh hidup baru untuk kedua mempelai. Semoga senantiasa diberkahi kelimpahan dan kebahagiaan.',
       date: '2 hari yang lalu'
     }
   ];
@@ -66,6 +66,13 @@
   const wishesContainer = document.getElementById('wishes-container');
   const wishesCountEl = document.getElementById('wishes-count');
 
+  function escapeHtml(text) {
+    if (typeof text !== 'string') text = String(text || '');
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   function renderWishes() {
     if (!wishesContainer) return;
     const wishes = getWishes();
@@ -94,10 +101,10 @@
       item.innerHTML = `
         <div class="wish-header">
           <div class="wish-user">
-            <div class="wish-avatar">${initial}</div>
+            <div class="wish-avatar">${escapeHtml(initial)}</div>
             <div>
               <div class="wish-name">${escapeHtml(wish.name)}</div>
-              <div class="wish-time">${wish.date}</div>
+              <div class="wish-time">${escapeHtml(wish.date)}</div>
             </div>
           </div>
           <div>${statusBadge}</div>
@@ -107,12 +114,6 @@
 
       wishesContainer.appendChild(item);
     });
-  }
-
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
   }
 
   // Handle Submit
@@ -125,9 +126,9 @@
       const guestsInput = document.getElementById('rsvp-guests');
       const messageInput = document.getElementById('rsvp-message');
 
-      if (!nameInput.value.trim()) {
+      if (!nameInput || !nameInput.value.trim()) {
         alert('Mohon masukkan nama Anda');
-        nameInput.focus();
+        if (nameInput) nameInput.focus();
         return;
       }
 
@@ -136,9 +137,9 @@
         return;
       }
 
-      if (!messageInput.value.trim()) {
+      if (!messageInput || !messageInput.value.trim()) {
         alert('Mohon tuliskan ucapan atau doa restu');
-        messageInput.focus();
+        if (messageInput) messageInput.focus();
         return;
       }
 
@@ -166,8 +167,10 @@
       // Keep name if from URL
       const urlParams = new URLSearchParams(window.location.search);
       const toParam = urlParams.get('to');
-      if (toParam) {
-        nameInput.value = decodeURIComponent(toParam);
+      if (toParam && nameInput) {
+        try {
+          nameInput.value = decodeURIComponent(toParam.replace(/\+/g, ' '));
+        } catch (err) {}
       }
     });
   }
@@ -215,4 +218,3 @@
   // Initial render
   renderWishes();
 })();
-

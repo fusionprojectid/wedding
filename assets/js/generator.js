@@ -32,11 +32,12 @@
   }
 
   function getBaseUrl() {
-    const url = window.location.href.split('?')[0];
+    const url = window.location.href.split('?')[0].split('#')[0];
     return url;
   }
 
   function generateLink() {
+    if (!inputName) return;
     const rawName = inputName.value.trim();
     if (!rawName) {
       if (resultContainer) resultContainer.style.display = 'none';
@@ -53,6 +54,17 @@
       resultContainer.style.display = 'block';
     }
 
+    // Dynamic couple names from config
+    let coupleText = 'Hanim & Firman';
+    if (typeof getWeddingConfig === 'function') {
+      const cfg = getWeddingConfig();
+      if (cfg && cfg.couple && cfg.couple.bride && cfg.couple.groom) {
+        const bride = cfg.couple.bride.nickname || 'Hanim';
+        const groom = cfg.couple.groom.nickname || 'Firman';
+        coupleText = `${bride} & ${groom}`;
+      }
+    }
+
     // Prepare WhatsApp Share
     if (btnShareWA) {
       btnShareWA.onclick = () => {
@@ -64,7 +76,7 @@ _Assalamu'alaikum Warahmatullahi Wabarakatuh_
 
 Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara resepsi pernikahan kami:
 
-*Hanim & Firman*
+*${coupleText}*
 
 Berikut tautan undangan kami untuk info lengkap acara:
 ${fullLink}
@@ -95,4 +107,3 @@ _Wassalamu'alaikum Warahmatullahi Wabarakatuh_`;
     });
   }
 })();
-

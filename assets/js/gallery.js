@@ -3,10 +3,12 @@
  */
 
 (function () {
-  const galleryItems = document.querySelectorAll('.gallery-item');
-  const filterBtns = document.querySelectorAll('.filter-btn');
   const modal = document.getElementById('gallery-modal');
   const modalImg = document.getElementById('modal-img');
+  if (!modal || !modalImg) return;
+
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  const filterBtns = document.querySelectorAll('.filter-btn');
   const btnClose = document.getElementById('modal-close');
   const btnPrev = document.getElementById('modal-prev');
   const btnNext = document.getElementById('modal-next');
@@ -53,8 +55,10 @@
   });
 
   function openModal(idx) {
-    if (!activeList[idx]) return;
+    if (!activeList || activeList.length === 0 || !activeList[idx]) return;
     const img = activeList[idx].querySelector('img');
+    if (!img) return;
+
     modalImg.src = img.src;
     modalImg.alt = img.alt || 'Foto Galeri';
     modal.classList.add('show');
@@ -69,11 +73,13 @@
   }
 
   function nextImage() {
+    if (!activeList || activeList.length === 0) return;
     currentIndex = (currentIndex + 1) % activeList.length;
     openModal(currentIndex);
   }
 
   function prevImage() {
+    if (!activeList || activeList.length === 0) return;
     currentIndex = (currentIndex - 1 + activeList.length) % activeList.length;
     openModal(currentIndex);
   }
@@ -82,11 +88,9 @@
   if (btnNext) btnNext.addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
   if (btnPrev) btnPrev.addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
 
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
-    });
-  }
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
 
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
@@ -96,4 +100,3 @@
     if (e.key === 'ArrowLeft') prevImage();
   });
 })();
-
