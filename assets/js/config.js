@@ -6,6 +6,11 @@
 
 const DEFAULT_WEDDING_CONFIG = {
   theme: 'template-1',
+  share: {
+    title: 'The Wedding of Hanim & Firman',
+    description: 'Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.',
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80'
+  },
   couple: {
     groom: {
       nickname: 'Firman',
@@ -142,8 +147,37 @@ function applyConfigToPage() {
   document.body.classList.add(activeTheme);
   document.documentElement.classList.add(activeTheme);
 
-  // 1. Title & Meta
-  document.title = `The Wedding of ${bNick} & ${gNick}`;
+  // 1. Title & Meta (Open Graph & SEO)
+  const s = config.share || DEFAULT_WEDDING_CONFIG.share;
+  const shareTitle = (s && s.title) ? s.title : `The Wedding of ${bNick} & ${gNick}`;
+  const shareDesc = (s && s.description) ? s.description : `Undangan Pernikahan Digital ${bNick} & ${gNick} - ${e.dateFormatted || ''}`;
+  const shareImage = (s && s.image) ? s.image : 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80';
+
+  document.title = shareTitle;
+
+  const setMeta = (selector, attr, val) => {
+    let el = document.querySelector(selector);
+    if (!el) {
+      el = document.createElement('meta');
+      if (selector.includes('property=')) {
+        const prop = selector.match(/property="([^"]+)"/);
+        if (prop) el.setAttribute('property', prop[1]);
+      } else if (selector.includes('name=')) {
+        const nm = selector.match(/name="([^"]+)"/);
+        if (nm) el.setAttribute('name', nm[1]);
+      }
+      document.head.appendChild(el);
+    }
+    el.setAttribute(attr, val);
+  };
+
+  setMeta('meta[property="og:title"]', 'content', shareTitle);
+  setMeta('meta[property="og:description"]', 'content', shareDesc);
+  setMeta('meta[property="og:image"]', 'content', shareImage);
+  setMeta('meta[name="description"]', 'content', shareDesc);
+  setMeta('meta[name="twitter:title"]', 'content', shareTitle);
+  setMeta('meta[name="twitter:description"]', 'content', shareDesc);
+  setMeta('meta[name="twitter:image"]', 'content', shareImage);
 
   // 2. Monograms
   const mono = `${bNick.charAt(0)}&amp;${gNick.charAt(0)}`;

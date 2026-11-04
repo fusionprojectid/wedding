@@ -140,6 +140,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Music
     setVal('audio-url', config.audioUrl);
 
+    // Share & Metadata Preview
+    const s = config.share || DEFAULT_WEDDING_CONFIG.share || {};
+    setVal('share-image', s.image || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80');
+    setVal('share-title', s.title || `The Wedding of ${c.bride.nickname || 'Hanim'} & ${c.groom.nickname || 'Firman'}`);
+    setVal('share-desc', s.description || 'Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.');
+    updateWaPreview();
+
     // Account
     try {
       const creds = JSON.parse(localStorage.getItem(AUTH_STORAGE_KEY) || '{"username":"admin"}');
@@ -220,7 +227,12 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         physicalAddress: getVal('gift-physical-address')
       },
-      audioUrl: getVal('audio-url')
+      audioUrl: getVal('audio-url'),
+      share: {
+        image: getVal('share-image') || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80',
+        title: getVal('share-title') || `The Wedding of ${getVal('bride-nickname') || 'Hanim'} & ${getVal('groom-nickname') || 'Firman'}`,
+        description: getVal('share-desc') || 'Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.'
+      }
     };
   }
 
@@ -380,6 +392,145 @@ _Wassalamu'alaikum Warahmatullahi Wabarakatuh_`;
 
       setVal('account-password', '');
       showAdminToast('🔐 Username & Password baru berhasil diperbarui!');
+    });
+  }
+
+  // 11. WhatsApp Preview Sync & GitHub Pages Meta Exporter
+  function updateWaPreview() {
+    const imgEl = document.getElementById('wa-preview-thumb');
+    const titleEl = document.getElementById('wa-preview-title');
+    const descEl = document.getElementById('wa-preview-desc');
+    const urlEl = document.getElementById('wa-preview-url');
+
+    const shareImg = getVal('share-image') || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80';
+    const bName = getVal('bride-nickname') || 'Hanim';
+    const gName = getVal('groom-nickname') || 'Firman';
+    const shareTitle = getVal('share-title') || `The Wedding of ${bName} & ${gName}`;
+    const shareDesc = getVal('share-desc') || 'Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.';
+
+    if (imgEl) imgEl.src = shareImg;
+    if (titleEl) titleEl.textContent = shareTitle;
+    if (descEl) descEl.textContent = shareDesc;
+    if (urlEl) {
+      const cur = window.location.href.split('?')[0].split('#')[0];
+      const base = cur.replace(/admin\.html.*$/, 'index.html');
+      urlEl.textContent = base;
+    }
+  }
+
+  ['share-image', 'share-title', 'share-desc'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updateWaPreview);
+  });
+
+  // Quick Photo Buttons
+  const btnBridePhoto = document.getElementById('btn-use-bride-photo');
+  if (btnBridePhoto) {
+    btnBridePhoto.addEventListener('click', () => {
+      const p = getVal('bride-photo');
+      if (p) {
+        setVal('share-image', p);
+        updateWaPreview();
+        showAdminToast('Foto mempelai wanita diterapkan ke thumbnail!');
+      } else {
+        alert('URL foto pengantin wanita di tab Data Mempelai masih kosong!');
+      }
+    });
+  }
+
+  const btnGroomPhoto = document.getElementById('btn-use-groom-photo');
+  if (btnGroomPhoto) {
+    btnGroomPhoto.addEventListener('click', () => {
+      const p = getVal('groom-photo');
+      if (p) {
+        setVal('share-image', p);
+        updateWaPreview();
+        showAdminToast('Foto mempelai pria diterapkan ke thumbnail!');
+      } else {
+        alert('URL foto pengantin pria di tab Data Mempelai masih kosong!');
+      }
+    });
+  }
+
+  const btnDefaultPhoto = document.getElementById('btn-use-default-photo');
+  if (btnDefaultPhoto) {
+    btnDefaultPhoto.addEventListener('click', () => {
+      setVal('share-image', 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80');
+      updateWaPreview();
+      showAdminToast('Foto thumbnail direset ke foto bawaan!');
+    });
+  }
+
+  // Copy Meta Tags to Clipboard
+  const btnCopyMeta = document.getElementById('btn-copy-meta-tags');
+  if (btnCopyMeta) {
+    btnCopyMeta.addEventListener('click', () => {
+      const config = collectFormData();
+      const metaCode = 
+`<!-- SEO & Social Media Metadata (Open Graph / WhatsApp Preview) -->
+<title>${config.share.title}</title>
+<meta name="description" content="${config.share.description}" />
+<meta property="og:title" content="${config.share.title}" />
+<meta property="og:description" content="${config.share.description}" />
+<meta property="og:image" content="${config.share.image}" />
+<meta property="og:type" content="website" />`;
+
+      navigator.clipboard.writeText(metaCode).then(() => {
+        showAdminToast('📋 Kode Meta Tag berhasil disalin!');
+      }).catch(() => {
+        prompt('Salin kode meta berikut:', metaCode);
+      });
+    });
+  }
+
+  // Download Updated index.html
+  const btnDownloadHtml = document.getElementById('btn-download-html');
+  if (btnDownloadHtml) {
+    btnDownloadHtml.addEventListener('click', async () => {
+      try {
+        const config = collectFormData();
+        showAdminToast('Menyiapkan file index.html terbaru...');
+        
+        let htmlText = '';
+        try {
+          const resp = await fetch('index.html');
+          if (resp.ok) {
+            htmlText = await resp.text();
+          }
+        } catch (fetchErr) {
+          console.warn('Fetch local index.html failed:', fetchErr);
+        }
+
+        if (!htmlText) {
+          alert('Tidak dapat membaca file index.html secara langsung. Silakan gunakan tombol "Salin Kode Tag Meta HTML" untuk menempelkannya ke index.html Anda.');
+          return;
+        }
+
+        const sTitle = config.share.title;
+        const sDesc = config.share.description;
+        const sImg = config.share.image;
+        const b = config.couple.bride.nickname;
+        const g = config.couple.groom.nickname;
+
+        // Replace metadata
+        htmlText = htmlText.replace(/<title>.*?<\/title>/i, `<title>${sTitle}</title>`);
+        htmlText = htmlText.replace(/<meta property="og:title" content=".*?" \/>/i, `<meta property="og:title" content="${sTitle}" />`);
+        htmlText = htmlText.replace(/<meta property="og:description" content=".*?" \/>/i, `<meta property="og:description" content="${sDesc}" />`);
+        htmlText = htmlText.replace(/<meta property="og:image" content=".*?" \/>/i, `<meta property="og:image" content="${sImg}" />`);
+        htmlText = htmlText.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${sDesc}" />`);
+
+        const blob = new Blob([htmlText], { type: 'text/html;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'index.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showAdminToast('📥 File index.html terbaru berhasil diunduh!');
+      } catch (err) {
+        console.error(err);
+        alert('Gagal membuat file index.html.');
+      }
     });
   }
 

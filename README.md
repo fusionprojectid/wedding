@@ -1,4 +1,4 @@
-# 💍 Undangan Pernikahan Digital Modern
+# 💍 Undangan Pernikahan Digital Modern (Hanim & Firman)
 
 Website undangan pernikahan digital interaktif, elegan, dan *mobile-first* yang dirancang dengan memisahkan struktur HTML, CSS, dan JavaScript secara modular dan teratur.
 
@@ -93,6 +93,7 @@ Website undangan pernikahan digital interaktif, elegan, dan *mobile-first* yang 
 
 16. **Dashboard Admin Pengantin (`admin.html`)**:
     - Panel visual interaktif untuk memilih template dengan 1 klik, mengubah data mempelai, jadwal acara, lokasi akad & resepsi, nomor rekening, hingga musik latar tanpa menyentuh kode.
+    - **Pengaturan Thumbnail & Preview Share WhatsApp/Medsos**: Atur gambar thumbnail Open Graph, judul, dan deskripsi dengan *Live WhatsApp Dark Mode Preview* dan tombol unduh `index.html` siap upload ke GitHub Pages.
     - Dilengkapi fitur ekspor/impor konfigurasi JSON, generator link tamu WhatsApp, dan pengaturan ganti password.
 
 17. **Efek Kelopak Bunga Berjatuhan Sesuai Tema (Falling Petals Canvas)**:

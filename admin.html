@@ -71,6 +71,9 @@
       <button class="tab-btn" data-tab="tab-media">
         <i class="fas fa-music"></i> Musik Latar
       </button>
+      <button class="tab-btn" data-tab="tab-share">
+        <i class="fas fa-share-alt"></i> Thumbnail &amp; Preview Share
+      </button>
       <button class="tab-btn" data-tab="tab-generator">
         <i class="fab fa-whatsapp"></i> Buat Tautan Tamu
       </button>
@@ -627,6 +630,91 @@
             <label for="audio-url" class="form-label">URL File Musik MP3:</label>
             <input type="text" id="audio-url" class="form-input" placeholder="Contoh: https://domain.com/musik.mp3 atau assets/music.mp3" />
           </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           TAB 6: THUMBNAIL & PREVIEW SHARE (WHATSAPP & MEDSOS)
+           =================================================================== -->
+      <div id="tab-share" class="tab-content">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-share-alt" style="color: var(--admin-primary);"></i> Thumbnail &amp; Preview Share (WhatsApp / Medsos)</h3>
+            <p>Atur gambar sampul, judul, dan kutipan teks yang otomatis muncul saat link undangan Anda dibagikan di WhatsApp, Telegram, Facebook, dll.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="share-image" class="form-label">
+              <i class="fas fa-image"></i> URL Gambar Thumbnail (Ukuran Rekomendasi: 1200x630 pixel atau foto persegi):
+            </label>
+            <input type="text" id="share-image" class="form-input" placeholder="Contoh: https://images.unsplash.com/... atau URL foto pengantin" />
+            <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+              <button type="button" id="btn-use-bride-photo" class="btn btn-secondary" style="font-size: 0.78rem; padding: 6px 12px;">
+                <i class="fas fa-female"></i> Pakai Foto Mempelai Wanita
+              </button>
+              <button type="button" id="btn-use-groom-photo" class="btn btn-secondary" style="font-size: 0.78rem; padding: 6px 12px;">
+                <i class="fas fa-male"></i> Pakai Foto Mempelai Pria
+              </button>
+              <button type="button" id="btn-use-default-photo" class="btn btn-secondary" style="font-size: 0.78rem; padding: 6px 12px;">
+                <i class="fas fa-undo"></i> Pakai Foto Bawaan
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="share-title" class="form-label"><i class="fas fa-heading"></i> Judul Saat Dibagikan (og:title):</label>
+            <input type="text" id="share-title" class="form-input" placeholder="Contoh: The Wedding of Hanim &amp; Firman" />
+          </div>
+
+          <div class="form-group">
+            <label for="share-desc" class="form-label"><i class="fas fa-quote-left"></i> Deskripsi Singkat (og:description):</label>
+            <textarea id="share-desc" class="form-textarea" rows="3" placeholder="Teks doa atau permohonan kehadiran yang muncul di bawah judul..."></textarea>
+          </div>
+
+          <!-- Live WhatsApp Preview Box -->
+          <div style="margin-top: 24px;">
+            <label class="form-label"><i class="fab fa-whatsapp" style="color: #25d366;"></i> Live Pratinjau Tampilan di WhatsApp:</label>
+            <p style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 10px;">
+              Simulasi tampilan tautan ketika dikirim di chat WhatsApp:
+            </p>
+            <div class="wa-preview-box">
+              <div class="wa-bubble">
+                <img id="wa-preview-thumb" class="wa-bubble-thumb" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80" alt="Preview Thumbnail" />
+                <div class="wa-bubble-content">
+                  <div id="wa-preview-title" class="wa-bubble-title">The Wedding of Hanim &amp; Firman</div>
+                  <div id="wa-preview-desc" class="wa-bubble-desc">Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.</div>
+                  <div class="wa-bubble-domain">fusionprojectid.github.io</div>
+                </div>
+              </div>
+              <div class="wa-bubble-link-text">
+                <i class="fas fa-link"></i> <span id="wa-preview-url">https://fusionprojectid.github.io/wedding/index.html</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tindakan Sinkronisasi GitHub Pages -->
+          <div style="margin-top: 24px; padding: 20px; background: #f8f9fa; border: 1px solid var(--admin-border); border-radius: 12px;">
+            <h4 style="font-size: 0.95rem; margin-bottom: 8px; color: #1a1a1a; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-cloud-upload-alt" style="color: var(--admin-primary);"></i> Terapkan ke File index.html (GitHub Pages)
+            </h4>
+            <p style="font-size: 0.82rem; color: #495057; line-height: 1.5; margin-bottom: 14px;">
+              WhatsApp membaca thumbnail langsung dari tag <code>&lt;meta property="og:image"&gt;</code> di dalam file <code>index.html</code> pada server hosting (GitHub Pages). Agar thumbnail di WhatsApp berubah, file <code>index.html</code> di repository GitHub Anda perlu diperbarui:
+            </p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button type="button" id="btn-download-html" class="btn btn-primary">
+                <i class="fas fa-download"></i> Unduh File index.html Siap Pakai
+              </button>
+              <button type="button" id="btn-copy-meta-tags" class="btn btn-secondary">
+                <i class="far fa-copy"></i> Salin Kode Tag Meta HTML
+              </button>
+            </div>
+          </div>
+
+          <!-- Alert Tips WhatsApp Cache -->
+          <div style="margin-top: 18px; padding: 14px; background: #e7f5ff; border: 1px solid #a5d8ff; border-radius: 10px; font-size: 0.82rem; color: #1971c2;">
+            <i class="fas fa-lightbulb"></i> <strong>Tips Cache WhatsApp:</strong> Jika setelah update di GitHub tampilan gambar di WhatsApp masih gambar lama, tambahkan parameter versi saat kirim link, contoh: <code>index.html?v=2</code>. WhatsApp akan langsung menampilkan thumbnail baru seketika tanpa tertahan cache!
+          </div>
+
         </div>
       </div>
 
