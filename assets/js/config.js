@@ -147,11 +147,18 @@ function applyConfigToPage() {
   document.body.classList.add(activeTheme);
   document.documentElement.classList.add(activeTheme);
 
-  // 1. Title & Meta (Open Graph & SEO)
-  const s = config.share || DEFAULT_WEDDING_CONFIG.share;
-  const shareTitle = (s && s.title) ? s.title : `The Wedding of ${bNick} & ${gNick}`;
-  const shareDesc = (s && s.description) ? s.description : `Undangan Pernikahan Digital ${bNick} & ${gNick} - ${e.dateFormatted || ''}`;
-  const shareImage = (s && s.image) ? s.image : 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80';
+  // 1. Title & Meta (Open Graph & SEO Otomatis dari Data Mempelai)
+  const shareTitle = `The Wedding of ${bNick} & ${gNick}`;
+  const shareDesc = `Undangan Pernikahan ${bNick} & ${gNick}${e.dateFormatted ? ' - ' + e.dateFormatted : ''}. Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.`;
+  
+  let shareImage = 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80';
+  if (config.share && config.share.image) {
+    shareImage = config.share.image;
+  } else if (c.bride && c.bride.photo) {
+    shareImage = c.bride.photo;
+  } else if (c.groom && c.groom.photo) {
+    shareImage = c.groom.photo;
+  }
 
   document.title = shareTitle;
 

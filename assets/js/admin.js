@@ -140,11 +140,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Music
     setVal('audio-url', config.audioUrl);
 
-    // Share & Metadata Preview
-    const s = config.share || DEFAULT_WEDDING_CONFIG.share || {};
-    setVal('share-image', s.image || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80');
-    setVal('share-title', s.title || `The Wedding of ${c.bride.nickname || 'Hanim'} & ${c.groom.nickname || 'Firman'}`);
-    setVal('share-desc', s.description || 'Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.');
+    // Share & Metadata Preview (Otomatis dari Mempelai)
+    if (config.share && config.share.source) {
+      const radio = document.querySelector(`input[name="share-thumb-source"][value="${config.share.source}"]`);
+      if (radio) radio.checked = true;
+    }
     updateWaPreview();
 
     // Account
@@ -229,9 +229,10 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       audioUrl: getVal('audio-url'),
       share: {
-        image: getVal('share-image') || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80',
-        title: getVal('share-title') || `The Wedding of ${getVal('bride-nickname') || 'Hanim'} & ${getVal('groom-nickname') || 'Firman'}`,
-        description: getVal('share-desc') || 'Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.'
+        source: (document.querySelector('input[name="share-thumb-source"]:checked') || {}).value || 'bride',
+        image: getSharePhoto(),
+        title: `The Wedding of ${getVal('bride-nickname') || 'Hanim'} & ${getVal('groom-nickname') || 'Firman'}`,
+        description: `Undangan Pernikahan ${getVal('bride-nickname') || 'Hanim'} & ${getVal('groom-nickname') || 'Firman'}. Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.`
       }
     };
   }
@@ -395,18 +396,34 @@ _Wassalamu'alaikum Warahmatullahi Wabarakatuh_`;
     });
   }
 
-  // 11. WhatsApp Preview Sync & GitHub Pages Meta Exporter
+  // 11. WhatsApp Preview Sync & GitHub Pages Meta Exporter (Otomatis dari Data Mempelai)
+  function getSharePhoto() {
+    const sourceEl = document.querySelector('input[name="share-thumb-source"]:checked');
+    const source = sourceEl ? sourceEl.value : 'bride';
+    const bPhoto = getVal('bride-photo');
+    const gPhoto = getVal('groom-photo');
+    const defCover = 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80';
+
+    if (source === 'bride') {
+      return bPhoto || gPhoto || defCover;
+    } else if (source === 'groom') {
+      return gPhoto || bPhoto || defCover;
+    } else {
+      return defCover;
+    }
+  }
+
   function updateWaPreview() {
     const imgEl = document.getElementById('wa-preview-thumb');
     const titleEl = document.getElementById('wa-preview-title');
     const descEl = document.getElementById('wa-preview-desc');
     const urlEl = document.getElementById('wa-preview-url');
 
-    const shareImg = getVal('share-image') || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80';
     const bName = getVal('bride-nickname') || 'Hanim';
     const gName = getVal('groom-nickname') || 'Firman';
-    const shareTitle = getVal('share-title') || `The Wedding of ${bName} & ${gName}`;
-    const shareDesc = getVal('share-desc') || 'Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.';
+    const shareTitle = `The Wedding of ${bName} & ${gName}`;
+    const shareDesc = `Undangan Pernikahan ${bName} & ${gName}. Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.`;
+    const shareImg = getSharePhoto();
 
     if (imgEl) imgEl.src = shareImg;
     if (titleEl) titleEl.textContent = shareTitle;
@@ -418,48 +435,15 @@ _Wassalamu'alaikum Warahmatullahi Wabarakatuh_`;
     }
   }
 
-  ['share-image', 'share-title', 'share-desc'].forEach(id => {
+  // Auto-update preview saat data mempelai diubah
+  ['bride-nickname', 'groom-nickname', 'bride-photo', 'groom-photo'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('input', updateWaPreview);
   });
 
-  // Quick Photo Buttons
-  const btnBridePhoto = document.getElementById('btn-use-bride-photo');
-  if (btnBridePhoto) {
-    btnBridePhoto.addEventListener('click', () => {
-      const p = getVal('bride-photo');
-      if (p) {
-        setVal('share-image', p);
-        updateWaPreview();
-        showAdminToast('Foto mempelai wanita diterapkan ke thumbnail!');
-      } else {
-        alert('URL foto pengantin wanita di tab Data Mempelai masih kosong!');
-      }
-    });
-  }
-
-  const btnGroomPhoto = document.getElementById('btn-use-groom-photo');
-  if (btnGroomPhoto) {
-    btnGroomPhoto.addEventListener('click', () => {
-      const p = getVal('groom-photo');
-      if (p) {
-        setVal('share-image', p);
-        updateWaPreview();
-        showAdminToast('Foto mempelai pria diterapkan ke thumbnail!');
-      } else {
-        alert('URL foto pengantin pria di tab Data Mempelai masih kosong!');
-      }
-    });
-  }
-
-  const btnDefaultPhoto = document.getElementById('btn-use-default-photo');
-  if (btnDefaultPhoto) {
-    btnDefaultPhoto.addEventListener('click', () => {
-      setVal('share-image', 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80');
-      updateWaPreview();
-      showAdminToast('Foto thumbnail direset ke foto bawaan!');
-    });
-  }
+  document.querySelectorAll('input[name="share-thumb-source"]').forEach(radio => {
+    radio.addEventListener('change', updateWaPreview);
+  });
 
   // Copy Meta Tags to Clipboard
   const btnCopyMeta = document.getElementById('btn-copy-meta-tags');
