@@ -77,8 +77,23 @@
       <button class="tab-btn" data-tab="tab-event">
         <i class="fas fa-calendar-check"></i> Waktu &amp; Lokasi Acara
       </button>
+      <button class="tab-btn" data-tab="tab-quote">
+        <i class="fas fa-quran"></i> Ayat &amp; Kutipan Suci
+      </button>
+      <button class="tab-btn" data-tab="tab-story">
+        <i class="fas fa-book-open"></i> Perjalanan Kami (Love Story)
+      </button>
+      <button class="tab-btn" data-tab="tab-gallery">
+        <i class="fas fa-images"></i> Galeri &amp; Unggah Foto
+      </button>
+      <button class="tab-btn" data-tab="tab-dresscode">
+        <i class="fas fa-tshirt"></i> Petunjuk Dress Code
+      </button>
       <button class="tab-btn" data-tab="tab-gift">
         <i class="fas fa-wallet"></i> Rekening Bank &amp; Kado
+      </button>
+      <button class="tab-btn" data-tab="tab-texts">
+        <i class="fas fa-pen-fancy"></i> Teks Sampul &amp; Footer
       </button>
       <button class="tab-btn" data-tab="tab-media">
         <i class="fas fa-music"></i> Musik Latar
@@ -434,8 +449,18 @@
               <input type="text" id="groom-instagram" class="form-input" placeholder="Contoh: firmanpratama" />
             </div>
             <div class="form-group">
-              <label for="groom-photo" class="form-label">URL Foto Profil:</label>
-              <input type="text" id="groom-photo" class="form-input" placeholder="URL foto online atau assets/images/groom.jpg" />
+              <label for="groom-photo" class="form-label">Foto Profil Mempelai Pria:</label>
+              <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                <input type="text" id="groom-photo" class="form-input" placeholder="URL foto online atau assets/images/groom.jpg" />
+                <label for="file-groom-photo" class="btn btn-secondary" style="white-space: nowrap; cursor: pointer; margin: 0; font-size: 0.82rem; padding: 8px 12px;" title="Unggah foto langsung dari HP/Laptop">
+                  <i class="fas fa-camera"></i> Unggah
+                  <input type="file" id="file-groom-photo" accept="image/*" style="display: none;" />
+                </label>
+              </div>
+              <div id="preview-groom-box" style="display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--admin-border);">
+                <img id="preview-groom-img" src="" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--admin-primary); display: none;" />
+                <span id="preview-groom-text" style="font-size: 0.78rem; color: #6c757d;">Foto profil pria aktif</span>
+              </div>
             </div>
           </div>
         </div>
@@ -486,8 +511,18 @@
               <input type="text" id="bride-instagram" class="form-input" placeholder="Contoh: hanimlathifah" />
             </div>
             <div class="form-group">
-              <label for="bride-photo" class="form-label">URL Foto Profil:</label>
-              <input type="text" id="bride-photo" class="form-input" placeholder="URL foto online atau assets/images/bride.jpg" />
+              <label for="bride-photo" class="form-label">Foto Profil Mempelai Wanita:</label>
+              <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                <input type="text" id="bride-photo" class="form-input" placeholder="URL foto online atau assets/images/bride.jpg" />
+                <label for="file-bride-photo" class="btn btn-secondary" style="white-space: nowrap; cursor: pointer; margin: 0; font-size: 0.82rem; padding: 8px 12px;" title="Unggah foto langsung dari HP/Laptop">
+                  <i class="fas fa-camera"></i> Unggah
+                  <input type="file" id="file-bride-photo" accept="image/*" style="display: none;" />
+                </label>
+              </div>
+              <div id="preview-bride-box" style="display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--admin-border);">
+                <img id="preview-bride-img" src="" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--admin-primary); display: none;" />
+                <span id="preview-bride-text" style="font-size: 0.78rem; color: #6c757d;">Foto profil wanita aktif</span>
+              </div>
             </div>
           </div>
         </div>
@@ -548,6 +583,71 @@
       </div>
 
       <!-- ===================================================================
+           TAB: PERJALANAN KAMI (OUR LOVE STORY)
+           =================================================================== -->
+      <div id="tab-story" class="tab-content">
+        <div class="admin-card">
+          <div class="admin-card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h3><i class="fas fa-heart" style="color: #e03131;"></i> Perjalanan Kami (Our Love Story)</h3>
+              <p>Ceritakan momen-momen indah perjalanan cinta Anda berdua dari awal bertemu hingga menuju pelaminan.</p>
+            </div>
+            <button type="button" id="btn-add-story" class="btn btn-primary" style="font-size: 0.85rem;">
+              <i class="fas fa-plus"></i> Tambah Momen Cerita Baru
+            </button>
+          </div>
+
+          <div id="stories-container" style="display: flex; flex-direction: column; gap: 16px;">
+            <!-- Story items rendered dynamically by assets/js/admin.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           TAB: GALERI & UNGGAH FOTO (OUR MOMENTS)
+           =================================================================== -->
+      <div id="tab-gallery" class="tab-content">
+        <div class="admin-card">
+          <div class="admin-card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h3><i class="fas fa-camera-retro" style="color: var(--admin-primary);"></i> Galeri &amp; Album Foto Kenangan</h3>
+              <p>Kelola dan unggah foto-foto momen prewedding &amp; kebersamaan yang tampil di galeri undangan.</p>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <label for="batch-upload-gallery" class="btn btn-primary" style="cursor: pointer; margin: 0; font-size: 0.85rem;" title="Pilih beberapa foto dari HP / Komputer">
+                <i class="fas fa-images"></i> Unggah Banyak Foto Sekaligus
+                <input type="file" id="batch-upload-gallery" multiple accept="image/*" style="display: none;" />
+              </label>
+              <button type="button" id="btn-add-gallery-item" class="btn btn-secondary" style="font-size: 0.85rem;">
+                <i class="fas fa-plus"></i> Tambah Foto Manual
+              </button>
+            </div>
+          </div>
+
+          <!-- Dropzone Area -->
+          <div id="gallery-dropzone" class="upload-dropzone" style="margin-bottom: 24px;">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <h4>Pilih atau Tarik Foto ke Sini</h4>
+            <p>Mendukung format JPG, PNG, atau WebP. Foto dikompresi otomatis agar ringan dimuat di ponsel para tamu.</p>
+          </div>
+
+          <!-- Counter and Gallery List -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <span id="gallery-count-badge" style="font-size: 0.85rem; font-weight: 700; color: #495057;">
+              <i class="fas fa-photo-video" style="color: var(--admin-primary);"></i> Koleksi Foto (<span id="gallery-total-count">0</span> foto)
+            </span>
+            <small style="color: #6c757d; font-size: 0.78rem;">
+              <i class="fas fa-info-circle"></i> Gunakan tombol panah untuk mengatur urutan foto
+            </small>
+          </div>
+
+          <div id="gallery-container" class="gallery-admin-grid">
+            <!-- Rendered dynamically by assets/js/admin.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
            TAB 3: WAKTU & LOKASI ACARA
            =================================================================== -->
       <div id="tab-event" class="tab-content">
@@ -576,6 +676,16 @@
           </div>
           <div class="grid-2">
             <div class="form-group">
+              <label for="event-akad-title" class="form-label">Nama Acara:</label>
+              <input type="text" id="event-akad-title" class="form-input" placeholder="Contoh: Akad Nikah / Pemberkatan" />
+            </div>
+            <div class="form-group">
+              <label for="event-akad-badge" class="form-label">Label Lencana (Badge):</label>
+              <input type="text" id="event-akad-badge" class="form-input" placeholder="Contoh: Sakral / Khidmat" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
               <label for="event-akad-time" class="form-label">Waktu Akad:</label>
               <input type="text" id="event-akad-time" class="form-input" placeholder="Contoh: Pukul 08.00 - 10.00 WIB" />
             </div>
@@ -593,6 +703,16 @@
         <div class="admin-card">
           <div class="admin-card-header">
             <h3><i class="fas fa-glass-cheers" style="color: var(--admin-primary);"></i> Detail Resepsi Pernikahan</h3>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="event-resepsi-title" class="form-label">Nama Acara:</label>
+              <input type="text" id="event-resepsi-title" class="form-input" placeholder="Contoh: Resepsi Pernikahan / Walimatul Ursy" />
+            </div>
+            <div class="form-group">
+              <label for="event-resepsi-badge" class="form-label">Label Lencana (Badge):</label>
+              <input type="text" id="event-resepsi-badge" class="form-input" placeholder="Contoh: Perayaan / Ramah Tamah" />
+            </div>
           </div>
           <div class="grid-2">
             <div class="form-group">
@@ -622,9 +742,180 @@
       </div>
 
       <!-- ===================================================================
+           TAB: TEKS SAMPUL & FOOTER
+           =================================================================== -->
+      <div id="tab-texts" class="tab-content">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-door-open" style="color: var(--admin-primary);"></i> Kustomisasi Halaman Pembuka (Cover)</h3>
+            <p>Atur teks penyambutan dan tombol buka undangan.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="cover-subtitle" class="form-label">Sub-judul Pembuka (Subtitle):</label>
+              <input type="text" id="cover-subtitle" class="form-input" placeholder="Contoh: The Wedding Celebration Of" />
+            </div>
+            <div class="form-group">
+              <label for="cover-btn-text" class="form-label">Teks Tombol Buka Undangan:</label>
+              <input type="text" id="cover-btn-text" class="form-input" placeholder="Contoh: Buka Undangan" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="cover-greeting-text" class="form-label">Teks Salam Tamu:</label>
+              <input type="text" id="cover-greeting-text" class="form-input" placeholder="Contoh: Kepada Yth. Bapak/Ibu/Saudara/i:" />
+            </div>
+            <div class="form-group">
+              <label for="cover-badge-text" class="form-label">Teks Lencana Tamu (Badge):</label>
+              <input type="text" id="cover-badge-text" class="form-input" placeholder="Contoh: Tamu Kehormatan" />
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-quote-right" style="color: var(--admin-primary);"></i> Teks Bagian Penutup (Footer)</h3>
+            <p>Atur ucapan terima kasih dan nama keluarga besar di akhir halaman.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="footer-thanks-text" class="form-label">Teks Ucapan Terima Kasih:</label>
+            <textarea id="footer-thanks-text" class="form-textarea" rows="3" placeholder="Ucapan terima kasih dari kedua mempelai..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="footer-family-text" class="form-label">Teks Keluarga Besar:</label>
+            <input type="text" id="footer-family-text" class="form-input" placeholder="Contoh: Keluarga Besar Bpk. Ahmad Hidayat & Bpk. Budi Santoso" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           TAB: AYAT SUCI & KUTIPAN KATA
+           =================================================================== -->
+      <div id="tab-quote" class="tab-content">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-quran" style="color: var(--admin-primary);"></i> Ayat Suci / Kutipan Indah</h3>
+            <p>Atur ayat suci Al-Qur'an, kutipan kitab suci, atau kata-kata mutiara romantis yang tampil di awal undangan.</p>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600;">
+              <input type="checkbox" id="quote-enabled" checked style="width: 18px; height: 18px;" />
+              <span>Tampilkan Bagian Kutipan / Ayat Suci di Undangan</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label for="quote-arabic" class="form-label">Teks Bahasa Arab / Kaligrafi (Opsional):</label>
+            <textarea id="quote-arabic" class="form-textarea" rows="3" placeholder="Teks ayat dalam tulisan Arab..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="quote-translation" class="form-label">Terjemahan / Isi Kutipan / Pesan Romantis:</label>
+            <textarea id="quote-translation" class="form-textarea" rows="4" placeholder="Tuliskan terjemahan ayat atau pesan romantis..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="quote-source" class="form-label">Rujukan Sumber / Nama Surat:</label>
+            <input type="text" id="quote-source" class="form-input" placeholder="Contoh: ~ QS. Ar-Rum: 21 ~ atau ~ Kahlil Gibran ~" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           TAB: DRESS CODE / PETUNJUK BUSANA
+           =================================================================== -->
+      <div id="tab-dresscode" class="tab-content">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-tshirt" style="color: var(--admin-primary);"></i> Petunjuk Pakaian (Dress Code)</h3>
+            <p>Pandu tamu undangan untuk mengenakan pakaian dengan palet warna yang serasi dengan tema acara Anda.</p>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600;">
+              <input type="checkbox" id="dresscode-enabled" checked style="width: 18px; height: 18px;" />
+              <span>Tampilkan Bagian Petunjuk Dress Code di Undangan</span>
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="dresscode-tag" class="form-label">Label Tag:</label>
+              <input type="text" id="dresscode-tag" class="form-input" placeholder="Contoh: Petunjuk Pakaian" />
+            </div>
+            <div class="form-group">
+              <label for="dresscode-title" class="form-label">Judul Bagian:</label>
+              <input type="text" id="dresscode-title" class="form-input" placeholder="Contoh: Dress Code" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="dresscode-desc" class="form-label">Deskripsi Arahan Busana:</label>
+            <input type="text" id="dresscode-desc" class="form-input" placeholder="Contoh: Para tamu undangan disarankan mengenakan busana bernuansa warna berikut:" />
+          </div>
+
+          <h4 style="font-size: 0.95rem; font-weight: 700; color: #343a40; margin: 20px 0 12px;">Palet Warna Rekomendasi (4 Warna):</h4>
+          <div class="grid-2">
+            <div class="form-group" style="background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border);">
+              <label class="form-label">Warna 1:</label>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="color" id="dc-color-1-hex" value="#586b62" style="width: 44px; height: 38px; border: 1px solid #ced4da; border-radius: 6px; cursor: pointer; padding: 2px;" />
+                <input type="text" id="dc-color-1-name" class="form-input" placeholder="Nama Warna (Contoh: Sage Green)" />
+              </div>
+            </div>
+            <div class="form-group" style="background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border);">
+              <label class="form-label">Warna 2:</label>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="color" id="dc-color-2-hex" value="#d4af37" style="width: 44px; height: 38px; border: 1px solid #ced4da; border-radius: 6px; cursor: pointer; padding: 2px;" />
+                <input type="text" id="dc-color-2-name" class="form-input" placeholder="Nama Warna (Contoh: Champagne)" />
+              </div>
+            </div>
+            <div class="form-group" style="background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border);">
+              <label class="form-label">Warna 3:</label>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="color" id="dc-color-3-hex" value="#cbb89d" style="width: 44px; height: 38px; border: 1px solid #ced4da; border-radius: 6px; cursor: pointer; padding: 2px;" />
+                <input type="text" id="dc-color-3-name" class="form-input" placeholder="Nama Warna (Contoh: Mocca)" />
+              </div>
+            </div>
+            <div class="form-group" style="background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border);">
+              <label class="form-label">Warna 4:</label>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="color" id="dc-color-4-hex" value="#f7f5f0" style="width: 44px; height: 38px; border: 1px solid #ced4da; border-radius: 6px; cursor: pointer; padding: 2px;" />
+                <input type="text" id="dc-color-4-name" class="form-input" placeholder="Nama Warna (Contoh: Ivory White)" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
            TAB 4: REKENING & KADO
            =================================================================== -->
       <div id="tab-gift" class="tab-content">
+        
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-gift" style="color: var(--admin-primary);"></i> Pengaturan Amplop Digital &amp; Kado</h3>
+            <p>Atur rekening bank, e-wallet, dan alamat untuk kado fisik dari para tamu.</p>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600;">
+              <input type="checkbox" id="gift-enabled" checked style="width: 18px; height: 18px;" />
+              <span>Tampilkan Bagian Rekening Bank &amp; Kado di Undangan</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label for="gift-intro" class="form-label">Teks Pengantar Kado / Doa Restu:</label>
+            <textarea id="gift-intro" class="form-textarea" rows="2" placeholder="Teks pengantar pemberian kado..."></textarea>
+          </div>
+        </div>
         
         <div class="admin-card">
           <div class="admin-card-header">
@@ -677,6 +968,57 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- ===================================================================
+           TAB: TEKS SAMPUL & FOOTER
+           =================================================================== -->
+      <div id="tab-texts" class="tab-content">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-door-open" style="color: var(--admin-primary);"></i> Kustomisasi Halaman Pembuka (Cover)</h3>
+            <p>Atur teks penyambutan dan tombol buka undangan.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="cover-subtitle" class="form-label">Sub-judul Pembuka (Subtitle):</label>
+              <input type="text" id="cover-subtitle" class="form-input" placeholder="Contoh: The Wedding Celebration Of" />
+            </div>
+            <div class="form-group">
+              <label for="cover-btn-text" class="form-label">Teks Tombol Buka Undangan:</label>
+              <input type="text" id="cover-btn-text" class="form-input" placeholder="Contoh: Buka Undangan" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="cover-greeting-text" class="form-label">Teks Salam Tamu:</label>
+              <input type="text" id="cover-greeting-text" class="form-input" placeholder="Contoh: Kepada Yth. Bapak/Ibu/Saudara/i:" />
+            </div>
+            <div class="form-group">
+              <label for="cover-badge-text" class="form-label">Teks Lencana Tamu (Badge):</label>
+              <input type="text" id="cover-badge-text" class="form-input" placeholder="Contoh: Tamu Kehormatan" />
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-quote-right" style="color: var(--admin-primary);"></i> Teks Bagian Penutup (Footer)</h3>
+            <p>Atur ucapan terima kasih dan nama keluarga besar di akhir halaman.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="footer-thanks-text" class="form-label">Teks Ucapan Terima Kasih:</label>
+            <textarea id="footer-thanks-text" class="form-textarea" rows="3" placeholder="Ucapan terima kasih dari kedua mempelai..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="footer-family-text" class="form-label">Teks Keluarga Besar:</label>
+            <input type="text" id="footer-family-text" class="form-input" placeholder="Contoh: Keluarga Besar Bpk. Ahmad Hidayat & Bpk. Budi Santoso" />
+          </div>
+        </div>
       </div>
 
       <!-- ===================================================================

@@ -1,0 +1,19 @@
+{
+  "name": "wedding-invitation",
+  "version": "2.2.0",
+  "description": "Modern & Luxury Digital Wedding Invitation with Admin Dashboard & 8 Design Themes",
+  "author": "fusionproject.id",
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/optimize.js",
+    "optimize": "node scripts/optimize.js",
+    "validate": "node scripts/validate.js",
+    "test": "node scripts/optimize.js && node scripts/validate.js"
+  },
+  "devDependencies": {
+    "clean-css": "^5.3.3",
+    "html-minifier-terser": "^7.2.0",
+    "sharp": "^0.35.5",
+    "terser": "^5.39.0"
+  }
+}

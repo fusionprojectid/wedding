@@ -1,4 +1,4 @@
-# 💍 Undangan Pernikahan Digital Modern (Hanim & Firman)
+# 💍 Undangan Pernikahan Digital Modern
 
 Website undangan pernikahan digital interaktif, elegan, dan *mobile-first* yang dirancang dengan memisahkan struktur HTML, CSS, dan JavaScript secara modular dan teratur.
 
@@ -176,6 +176,74 @@ Buka `index.html` pada bagian section `#gift`, sesuaikan nomor rekening pada atr
   <i class="far fa-copy"></i> Salin No. Rekening
 </button>
 ```
+
+---
+
+## ⚡ GitHub Actions Workflow & Asset Optimization Pipeline
+
+Proyek ini dilengkapi dengan konfigurasi **GitHub Actions CI/CD** profesional ([`.github/workflows/optimize.yml`](file:///.github/workflows/optimize.yml)) dan pipeline optimasi Node.js LTS untuk memaksimalkan performa loading website secara otomatis setiap kali kode di-push ke branch `main`.
+
+### 🎯 Fitur & Spesifikasi Optimasi:
+1. **Minifikasi CSS (Clean-CSS)**: Mengompresi seluruh file CSS (level 2) dengan penggabungan aturan duplikat dan pembersihan komentar, menghasilkan berkas `.css` dan `.min.css` di dalam `dist/assets/css/`.
+2. **Minifikasi JavaScript (Terser)**: Mengoptimalkan kode JS melalui proses kompresi 2-pass dan mangling aman yang melindungi identifier krusial web.
+3. **Kompresi Gambar & Konversi WebP (Sharp)**:
+   - File JPG/JPEG dikompresi (kualitas 82) dan dibuatkan versi WebP 82%.
+   - File PNG dikompresi (kualitas 85) dengan **mempertahankan transparansi (alpha channel)** dan dibuatkan versi WebP 85%.
+   - File format asli tetap dipertahankan di `dist/assets/images/`.
+4. **Minifikasi HTML (html-minifier-terser)**: Membersihkan spasi berlebih dan komentar pada `index.html`, `admin.html`, dan `login.html` tanpa merusak doctype maupun referensi aset.
+5. **Integritas Source Terjaga**: Berkas sumber asli di root dan `assets/` **sama sekali tidak diubah**; seluruh hasil optimasi disimpan rapi di dalam direktori `dist/` dengan struktur folder yang tetap identik.
+6. **Validasi Build Otomatis**: Dilengkapi pengujian sintaks JavaScript (`vm.Script`) dan kelengkapan berkas untuk memastikan tidak ada link atau script yang rusak sebelum dipublikasikan.
+
+---
+
+### 🚀 Cara Menjalankan di GitHub Actions
+
+Workflow akan berjalan otomatis setiap ada `push` ke branch `main`. Anda juga dapat memicunya secara manual via **workflow_dispatch**:
+
+1. Buka tab **Actions** di repositori GitHub Anda.
+2. Pilih workflow **"⚡ Website Asset Optimization & Deployment"**.
+3. Klik tombol **Run workflow** lalu pilih opsi **Target Publikasi**:
+   - `github_pages` *(Default)*: Otomatis mempublikasikan paket `dist/` ke live site GitHub Pages.
+   - `gh_pages_branch`: Melakukan commit dan push hasil `dist/` ke branch khusus `gh-pages`.
+   - `artifact_only`: Hanya memproses dan mengunggah paket `dist-production` sebagai GitHub Artifact (tersedia diunduh selama 30 hari).
+
+---
+
+### 💻 Cara Menjalankan Secara Lokal
+
+Anda dapat menguji dan menjalankan pipeline optimasi di komputer lokal:
+
+```bash
+# 1. Jalankan build optimasi lengkap (Output ke folder dist/)
+npm run build
+
+# 2. Jalankan validasi integritas dist/
+npm run validate
+
+# 3. Jalankan keduanya sekaligus (Build + Validasi)
+npm test
+```
+
+---
+
+### 📊 Hasil Pengujian Laporan Ukuran & Penghematan
+
+| Tipe Aset | Berkas Sumber | Ukuran Asli | Setelah Optimasi | Penghematan | Estimasi Gzip |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| **CSS** | `assets/css/style.css` | 32.58 KB | 23.60 KB | **-27.6%** | 5.32 KB |
+| **CSS** | `assets/css/themes.css` | 32.22 KB | 24.48 KB | **-24.0%** | 4.59 KB |
+| **CSS** | `assets/css/admin.css` | 9.56 KB | 7.22 KB | **-24.4%** | 2.09 KB |
+| **CSS** | `assets/css/animations.css` | 2.16 KB | 1.24 KB | **-42.5%** | 432 B |
+| **JS** | `assets/js/admin.js` | 26.07 KB | 16.51 KB | **-36.7%** | 5.61 KB |
+| **JS** | `assets/js/config.js` | 16.71 KB | 11.60 KB | **-30.5%** | 4.02 KB |
+| **JS** | `assets/js/rsvp.js` | 6.71 KB | 4.10 KB | **-38.8%** | 1.78 KB |
+| **JS** | `assets/js/main.js` | 6.28 KB | 3.25 KB | **-48.2%** | 1.28 KB |
+| **JS** | `assets/js/countdown.js` | 4.81 KB | 2.75 KB | **-42.7%** | 1.36 KB |
+| **IMG (PNG)** | `assets/images/sample-badge.png` | 1.34 KB | 167 B | **-87.9%** | 147 B |
+| **IMG (WebP)**| `sample-badge.png -> .webp` | 1.34 KB | 206 B | **-85.0%** | 224 B |
+| **HTML** | `index.html` | 28.96 KB | 21.63 KB | **-25.3%** | 6.03 KB |
+| **HTML** | `admin.html` | 46.50 KB | 32.94 KB | **-29.2%** | 7.24 KB |
+| **TOTAL** | **Semua Berkas Web** | **236.74 KB** | **162.89 KB** | **-31.2%** | **45.36 KB** |
 
 ---
 
