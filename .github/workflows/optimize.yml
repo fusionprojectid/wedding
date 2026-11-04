@@ -1,0 +1,121 @@
+name: ⚡ Website Asset Optimization & Deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE.txt'
+      - '.gitignore'
+  workflow_dispatch:
+    inputs:
+      deploy_mode:
+        description: 'Pilih Target Publikasi / Penyimpanan'
+        required: true
+        type: choice
+        default: 'github_pages'
+        options:
+          - 'github_pages'
+          - 'gh_pages_branch'
+          - 'artifact_only'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # =========================================================================
+  # 1. OPTIMIZE & VALIDATE JOB
+  # =========================================================================
+  build-and-optimize:
+    name: 🚀 Minify, Compress & Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: ⚙️ Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install Stable Dependencies
+        run: npm ci || npm install
+
+      - name: ⚡ Run Asset Optimizer (Clean-CSS, Terser, Sharp & HTML-Minifier)
+        run: node scripts/optimize.js
+
+      - name: 🔍 Run Strict Build Integrity Validation
+        run: node scripts/validate.js
+
+      - name: 📤 Upload Build Artifact (dist/)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-production
+          path: dist/
+          retention-days: 30
+
+  # =========================================================================
+  # 2. OPTIONAL: COMMIT TO DEDICATED BRANCH (gh-pages)
+  # =========================================================================
+  deploy-to-branch:
+    name: 🌿 Commit ke Branch Khusus (gh-pages)
+    needs: build-and-optimize
+    if: github.event.inputs.deploy_mode == 'gh_pages_branch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📥 Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-production
+          path: dist
+
+      - name: 🚀 Push to gh-pages Branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          commit_message: "chore: automated deployment of optimized assets [skip ci]"
+
+  # =========================================================================
+  # 3. OFFICIAL GITHUB PAGES DEPLOYMENT
+  # =========================================================================
+  deploy-to-github-pages:
+    name: 🌐 Deploy ke GitHub Pages
+    needs: build-and-optimize
+    if: github.event_name == 'push' || github.event.inputs.deploy_mode == 'github_pages'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-production
+          path: dist
+
+      - name: ⚙️ Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: 📦 Upload GitHub Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist'
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
